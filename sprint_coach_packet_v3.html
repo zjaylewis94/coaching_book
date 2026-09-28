@@ -1,0 +1,2184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RHS Rams — Sprint Coach Packet</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #152240;
+    --columbia: #6aace4;
+    --columbia-light: #a8cef0;
+    --white: #f8f9fa;
+    --black: #0d0d0d;
+    --gold: #e8c84a;
+    --red: #d94040;
+    --green: #3aaa6e;
+    --gray: #8a9ab8;
+    --panel: #111f38;
+    --border: rgba(106,172,228,0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, var(--navy) 0%, #0d1f3c 60%, #091528 100%);
+    border-bottom: 3px solid var(--columbia);
+    padding: 28px 32px 22px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .header-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    color: var(--columbia);
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+  .header-sub {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.85rem;
+    color: var(--gray);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+  .header-divider {
+    width: 2px;
+    height: 44px;
+    background: var(--border);
+    margin: 0 4px;
+  }
+  .header-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    color: var(--white);
+    letter-spacing: 1.5px;
+  }
+  .header-note {
+    margin-left: auto;
+    font-size: 0.75rem;
+    color: var(--gray);
+    font-style: italic;
+    max-width: 260px;
+    line-height: 1.4;
+    text-align: right;
+  }
+
+  /* TAB NAV */
+  .tab-nav {
+    background: var(--navy-mid);
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 0 24px;
+  }
+  .tab-nav::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gray);
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    padding: 14px 20px 12px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { color: var(--columbia-light); }
+  .tab-btn.active {
+    color: var(--columbia);
+    border-bottom-color: var(--columbia);
+  }
+
+  /* CONTENT */
+  .tab-content { display: none; padding: 36px 32px; max-width: 1100px; margin: 0 auto; }
+  .tab-content.active { display: block; }
+
+  /* SECTION TITLES */
+  .section-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--columbia);
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.4rem;
+    color: var(--white);
+    letter-spacing: 1px;
+    line-height: 1;
+    margin-bottom: 20px;
+  }
+  .section-intro {
+    color: var(--gray);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    max-width: 720px;
+    margin-bottom: 32px;
+    border-left: 3px solid var(--columbia);
+    padding-left: 16px;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    color: var(--columbia);
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .card p { font-size: 0.9rem; line-height: 1.7; color: #c0cfe8; margin-bottom: 10px; }
+  .card p:last-child { margin-bottom: 0; }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  @media(max-width: 768px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+  /* PHASE CARDS */
+  .phase-card {
+    border-radius: 8px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .phase-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+  }
+  .phase-endurance { background: linear-gradient(135deg, #0e2a1a, #112218); border: 1px solid rgba(58,170,110,0.3); }
+  .phase-endurance::before { background: var(--green); }
+  .phase-strength { background: linear-gradient(135deg, #1a1a0e, #221e11); border: 1px solid rgba(232,200,74,0.3); }
+  .phase-strength::before { background: var(--gold); }
+  .phase-speed { background: linear-gradient(135deg, #1a0e0e, #221111); border: 1px solid rgba(217,64,64,0.3); }
+  .phase-speed::before { background: var(--red); }
+  .phase-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+  .phase-endurance .phase-label { color: var(--green); }
+  .phase-strength .phase-label { color: var(--gold); }
+  .phase-speed .phase-label { color: var(--red); }
+  .phase-stat {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    color: var(--gray);
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .phase-stat:last-of-type { border-bottom: none; }
+  .phase-stat span:last-child { font-weight: 600; color: var(--white); }
+  .phase-desc { font-size: 0.85rem; color: #8a9ab8; line-height: 1.6; margin-top: 12px; }
+
+  /* RULE CARDS */
+  .rule-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    display: flex;
+    gap: 16px;
+    margin-bottom: 14px;
+    align-items: flex-start;
+  }
+  .rule-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    color: var(--columbia);
+    line-height: 1;
+    min-width: 36px;
+  }
+  .rule-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+  .rule-body { font-size: 0.87rem; color: #8a9ab8; line-height: 1.6; }
+
+  /* WORKOUT LIBRARY */
+  .workout-filter {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+  .filter-btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 7px 16px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--gray);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .filter-btn:hover { border-color: var(--columbia); color: var(--columbia); }
+  .filter-btn.active { background: var(--columbia); color: var(--navy); border-color: var(--columbia); }
+  .filter-btn.endurance.active { background: var(--green); border-color: var(--green); color: #fff; }
+  .filter-btn.strength.active { background: var(--gold); border-color: var(--gold); color: var(--navy); }
+  .filter-btn.speed.active { background: var(--red); border-color: var(--red); color: #fff; }
+
+  .workout-item {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .workout-item:hover { border-color: var(--columbia); }
+  .workout-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .workout-phase-tag {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 3px;
+    min-width: 80px;
+    text-align: center;
+  }
+  .tag-endurance { background: rgba(58,170,110,0.2); color: var(--green); }
+  .tag-strength { background: rgba(232,200,74,0.2); color: var(--gold); }
+  .tag-speed { background: rgba(217,64,64,0.2); color: var(--red); }
+  .tag-all { background: rgba(106,172,228,0.15); color: var(--columbia); }
+  .workout-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--white);
+    flex: 1;
+  }
+  .workout-type-tag {
+    font-size: 0.72rem;
+    color: var(--gray);
+    font-style: italic;
+  }
+  .workout-chevron {
+    color: var(--gray);
+    font-size: 0.9rem;
+    transition: transform 0.2s;
+  }
+  .workout-item.open .workout-chevron { transform: rotate(180deg); }
+  .workout-body {
+    display: none;
+    padding: 0 20px 20px;
+    border-top: 1px solid var(--border);
+  }
+  .workout-item.open .workout-body { display: block; }
+  .workout-body p { font-size: 0.87rem; color: #8a9ab8; line-height: 1.8; margin-top: 12px; }
+  .workout-table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 0.83rem; }
+  .workout-table th {
+    text-align: left;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--columbia);
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .workout-table td {
+    padding: 8px 10px;
+    color: #c0cfe8;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .workout-table tr:last-child td { border-bottom: none; }
+  .workout-note {
+    background: rgba(106,172,228,0.07);
+    border-left: 3px solid var(--columbia);
+    padding: 10px 14px;
+    margin-top: 12px;
+    font-size: 0.83rem;
+    color: #8a9ab8;
+    border-radius: 0 4px 4px 0;
+    font-style: italic;
+  }
+
+  /* WARM UP SECTION */
+  .warmup-block {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .warmup-header {
+    background: linear-gradient(90deg, var(--navy-mid), transparent);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .warmup-letter {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: var(--columbia);
+    line-height: 1;
+    width: 32px;
+  }
+  .warmup-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.5px;
+  }
+  .warmup-subtitle { font-size: 0.78rem; color: var(--gray); margin-top: 2px; }
+  .warmup-content { padding: 16px 20px; }
+  .drill-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .drill-list li {
+    font-size: 0.83rem;
+    color: #8a9ab8;
+    padding: 4px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .drill-list li::before {
+    content: '›';
+    color: var(--columbia);
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  /* TECHNIQUE SECTION */
+  .checklist-block {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .checklist-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .checklist-icon { font-size: 1.4rem; }
+  .checklist-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    color: var(--columbia);
+    letter-spacing: 1px;
+  }
+  .checklist-objective {
+    font-size: 0.83rem;
+    color: var(--gray);
+    margin-left: auto;
+    font-style: italic;
+    max-width: 300px;
+    text-align: right;
+  }
+  .checklist-body { padding: 20px; }
+  .kpi-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    background: rgba(255,255,255,0.03);
+    font-size: 0.87rem;
+  }
+  .kpi-row:last-child { margin-bottom: 0; }
+  .kpi-name { color: var(--white); font-weight: 500; }
+  .kpi-points {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+    color: var(--columbia);
+    background: rgba(106,172,228,0.1);
+    padding: 3px 10px;
+    border-radius: 3px;
+  }
+
+  .mistake-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 20px; }
+  @media(max-width: 768px) { .mistake-grid { grid-template-columns: 1fr; } }
+  .mistake-block {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px;
+  }
+  .mistake-category {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--columbia);
+    margin-bottom: 8px;
+  }
+  .mistake-item {
+    font-size: 0.82rem;
+    color: #8a9ab8;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .mistake-item.common::before { content: '⚠'; font-size: 0.7rem; color: var(--gold); }
+  .mistake-item.advanced::before { content: '◆'; font-size: 0.7rem; color: var(--red); }
+  .mistake-item:last-child { border-bottom: none; }
+
+  /* RELAY SECTION */
+  .relay-rule {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 14px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .relay-icon {
+    font-size: 1.6rem;
+    min-width: 36px;
+    text-align: center;
+  }
+  .relay-rule-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 5px;
+  }
+  .relay-rule-body { font-size: 0.85rem; color: #8a9ab8; line-height: 1.6; }
+
+  .relay-key-rule {
+    background: linear-gradient(135deg, #0d1a30, #091528);
+    border: 2px solid var(--columbia);
+    border-radius: 8px;
+    padding: 20px 24px;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .relay-key-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 3px;
+    color: var(--gray);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .relay-key-line {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+    line-height: 1.5;
+  }
+  .relay-key-line .blue { color: var(--columbia); }
+  .relay-key-line .red { color: var(--red); }
+
+  /* RESOURCES */
+  .resource-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 14px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .resource-icon {
+    font-size: 1.8rem;
+    min-width: 40px;
+    text-align: center;
+  }
+  .resource-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--columbia);
+    margin-bottom: 4px;
+  }
+  .resource-source {
+    font-size: 0.72rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 8px;
+  }
+  .resource-body { font-size: 0.85rem; color: #8a9ab8; line-height: 1.6; }
+  .resource-link {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 0.8rem;
+    color: var(--columbia);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(106,172,228,0.3);
+  }
+  .resource-link:hover { border-bottom-color: var(--columbia); }
+
+  /* ELDOA */
+  .eldoa-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media(max-width: 768px) { .eldoa-grid { grid-template-columns: 1fr 1fr; } }
+  .eldoa-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px;
+    text-align: center;
+  }
+  .eldoa-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    color: var(--columbia);
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+  }
+  .eldoa-desc { font-size: 0.8rem; color: #8a9ab8; line-height: 1.5; }
+
+  /* LIFT SECTION */
+  .lift-block {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .lift-header {
+    background: linear-gradient(90deg, var(--navy-mid), transparent);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .lift-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    color: var(--columbia);
+    letter-spacing: 1px;
+  }
+  .lift-scheme {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--gold);
+    background: rgba(232,200,74,0.1);
+    padding: 4px 12px;
+    border-radius: 3px;
+  }
+  .lift-content { padding: 18px 20px; }
+  .lift-category {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+    margin-top: 16px;
+  }
+  .lift-category:first-child { margin-top: 0; }
+  .lift-pill-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .lift-pill {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    padding: 6px 14px;
+    font-size: 0.82rem;
+    color: #c0cfe8;
+  }
+
+  /* GENERAL STRENGTH */
+  .strength-circuit {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .circuit-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .circuit-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    color: var(--columbia);
+    letter-spacing: 1px;
+  }
+  .circuit-tag {
+    font-size: 0.72rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+  .circuit-exercises {
+    padding: 14px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .exercise-chip {
+    background: rgba(106,172,228,0.07);
+    border: 1px solid rgba(106,172,228,0.15);
+    border-radius: 4px;
+    padding: 5px 12px;
+    font-size: 0.8rem;
+    color: #a0b8d8;
+  }
+
+  /* WEEK SCHEDULE */
+  .week-display {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .week-header {
+    background: linear-gradient(90deg, var(--navy-mid), transparent);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .week-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    color: var(--white);
+    letter-spacing: 1px;
+  }
+  .week-phase-badge {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 3px;
+  }
+  .week-grid { display: grid; grid-template-columns: repeat(6, 1fr); }
+  .day-col {
+    border-right: 1px solid var(--border);
+    padding: 0;
+  }
+  .day-col:last-child { border-right: none; }
+  .day-header {
+    padding: 10px 12px 8px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(0,0,0,0.2);
+  }
+  .day-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 2px;
+  }
+  .day-focus {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--columbia);
+  }
+  .day-content { padding: 12px; font-size: 0.75rem; color: #7a8aaa; line-height: 1.7; }
+  .day-item { padding: 2px 0; }
+  .day-item.highlight { color: var(--white); }
+
+  /* GOLDEN RULES from Sprint Project */
+  .golden-rule {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    display: flex;
+    gap: 16px;
+    margin-bottom: 12px;
+    align-items: flex-start;
+    border-left: 3px solid var(--gold);
+  }
+  .golden-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: var(--gold);
+    line-height: 1;
+    min-width: 32px;
+  }
+  .golden-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 6px;
+    letter-spacing: 0.3px;
+  }
+  .golden-body { font-size: 0.85rem; color: #8a9ab8; line-height: 1.65; }
+
+  /* DIVIDERS */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 28px 0;
+  }
+  .sub-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    color: var(--white);
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .sub-heading::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ARMY NOTE */
+  .army-banner {
+    background: linear-gradient(135deg, #0a1a12, #091528);
+    border: 1px solid rgba(58,170,110,0.35);
+    border-radius: 8px;
+    padding: 20px 24px;
+    display: flex;
+    gap: 16px;
+    margin-bottom: 32px;
+    align-items: center;
+  }
+  .army-icon { font-size: 2rem; }
+  .army-text { font-size: 0.87rem; color: #8aa898; line-height: 1.7; }
+  .army-text strong { color: var(--white); }
+
+  /* SCROLL TOP */
+  .scroll-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--columbia);
+    color: var(--navy);
+    border: none;
+    border-radius: 6px;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  }
+  .scroll-top.visible { display: flex; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div>
+    <div class="header-logo">RHS RAMS</div>
+    <div class="header-sub">Track & Field · Sprints / Hurdles / Jumps</div>
+  </div>
+  <div class="header-divider"></div>
+  <div>
+    <div class="header-title">Sprint Coach Reference Packet</div>
+  </div>
+  <div class="header-note">
+    Prepared by Coach Lewis · For Coach DeFrank · Built to train you to coach independently
+  </div>
+</header>
+
+<!-- TAB NAV -->
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('philosophy')">Philosophy</button>
+  <button class="tab-btn" onclick="switchTab('rules')">Coaching Rules</button>
+  <button class="tab-btn" onclick="switchTab('sprints')">Sprints</button>
+  <button class="tab-btn" onclick="switchTab('hurdles')">Hurdles</button>
+  <button class="tab-btn" onclick="switchTab('relay')">Relays</button>
+  <button class="tab-btn" onclick="switchTab('warmup')">Warm-Up Guide</button>
+  <button class="tab-btn" onclick="switchTab('lifts')">Lifting Program</button>
+  <button class="tab-btn" onclick="switchTab('technique')">Technique &amp; Diagnosis</button>
+  <button class="tab-btn" onclick="switchTab('recovery')">Recovery &amp; ELDOA</button>
+  <button class="tab-btn" onclick="switchTab('programming')">How To Program</button>
+  <button class="tab-btn" onclick="switchTab('resources')">Resources</button>
+</nav>
+
+<!-- ====================== PHILOSOPHY ====================== -->
+<div class="tab-content active" id="tab-philosophy">
+  <div class="army-banner">
+    <div class="army-icon">🎖️</div>
+    <div class="army-text">
+      <strong>A note from Coach Lewis:</strong> I'm putting together this packet because I may be away serving in the Army and I need to be able to trust that you can run this program. Everything in here is my system — my philosophy, my workouts, my resources. You are not a robot following orders. Use this as your foundation, then build on it your own way. That's how good coaches grow.
+    </div>
+  </div>
+
+  <div class="section-label">Section 1</div>
+  <div class="section-title">Program Philosophy</div>
+  <div class="section-intro">
+    This isn't just a workout plan — it's a set of beliefs about what we're doing and why. Read this section before anything else. If you understand the philosophy, the rest of the packet will make sense.
+  </div>
+
+  <div class="sub-heading">Program Identity</div>
+  <div class="card">
+    <div class="card-title">What We're Building</div>
+    <p>We train teenagers to become solid young adults. The goal is never to manufacture superstars or chase individual glory — it's to build a program of disciplined, coachable athletes who compete with effort, professionalism, and class.</p>
+    <p>We train for <strong style="color:var(--columbia)">team championships</strong>. That mindset shapes everything from how we practice to how we show up at meets. Personal records matter, but they are a byproduct of doing things right — not the end goal in themselves.</p>
+  </div>
+
+  <div class="sub-heading">Dignity and Class</div>
+  <div class="card">
+    <div class="card-title">The Daily Standard</div>
+    <p>This isn't just a meet-day expectation — it's how we operate every single day. Athletes carry themselves with professionalism in practice, compete with respect for their competitors, and represent Ramona with class in every setting.</p>
+    <p>How we treat other teams, officials, and the sport itself is as important as what we run. We do not have divas on this team. We do not talk trash. We do not cut corners. We win and lose with dignity.</p>
+  </div>
+
+  <div class="sub-heading">Training Philosophy</div>
+  <div class="card">
+    <div class="card-title">Modern Sprint Development — Quality Over Volume</div>
+    <p>We are in the modern school of sprint development. Training is <strong style="color:var(--columbia)">purposeful, intense, and deliberate</strong> — not high-mileage, grind-it-out work. Every rep has a reason. Every session has an intent. Athletes run fast, rest fully, and focus completely.</p>
+    <p>Senseless volume is not the goal. We do not run 100s to train for the 100. We do not run until athletes are broken. We isolate the phase of the sprint we are developing — acceleration, max velocity, or endurance — and we train that phase with quality. This program is <strong style="color:var(--columbia)">Altis-based</strong>. Altis (altis.world) is a world-class track and field performance center whose methods form the foundation of how we structure training. Study their work.</p>
+  </div>
+
+  <div class="sub-heading">The Three Training Phases</div>
+  <div class="grid-3">
+    <div class="phase-card phase-endurance">
+      <div class="phase-label">Endurance</div>
+      <div class="phase-stat"><span>Volume</span><span>HIGH</span></div>
+      <div class="phase-stat"><span>Rest</span><span>MID</span></div>
+      <div class="phase-stat"><span>Speed</span><span>LOW</span></div>
+      <div class="phase-desc">Build the aerobic and structural base. Broken ladders, bodybuilding lifts, hill runs. Athletes must be capable of working before they can be capable of sprinting.</div>
+    </div>
+    <div class="phase-card phase-strength">
+      <div class="phase-label">Strength</div>
+      <div class="phase-stat"><span>Volume</span><span>MID</span></div>
+      <div class="phase-stat"><span>Rest</span><span>LOW</span></div>
+      <div class="phase-stat"><span>Speed</span><span>MID</span></div>
+      <div class="phase-desc">Develop power and resilience. Transition from bodybuilding to power lifting. Sleds, plyometrics, and relay work become primary. Quality begins to matter more.</div>
+    </div>
+    <div class="phase-card phase-speed">
+      <div class="phase-label">Speed</div>
+      <div class="phase-stat"><span>Volume</span><span>LOW</span></div>
+      <div class="phase-stat"><span>Rest</span><span>HIGH</span></div>
+      <div class="phase-stat"><span>Speed</span><span>HIGH</span></div>
+      <div class="phase-desc">Express speed at full intensity. Full rest between reps. Max effort only. Athletes should never reach this phase without Endurance and Strength as a foundation. Speed is not built — it is revealed.</div>
+    </div>
+  </div>
+
+  <div class="workout-note" style="margin-top: 8px;">⚠️ Important: Phases must be earned. Do not skip ahead. An athlete who has not built the base has nothing to express in the Speed phase.</div>
+</div>
+
+<!-- ====================== COACHING RULES ====================== -->
+<div class="tab-content" id="tab-rules">
+  <div class="section-label">Section 2</div>
+  <div class="section-title">Coaching Rules</div>
+  <div class="section-intro">These are Coach Lewis's personal rules for running this program, combined with the foundational principles from The Sprint Project's "5 Golden Rules." These are not suggestions — they are what separates a good practice from a wasted one.</div>
+
+  <div class="sub-heading">Coach Lewis's Rules</div>
+
+  <div class="rule-card">
+    <div class="rule-num">1</div>
+    <div>
+      <div class="rule-title">Every Rep Has a Purpose</div>
+      <div class="rule-body">If you can't tell the athlete why they're doing a rep, don't assign it. Every workout, every drill, every set should have an intent. Athletes who understand the purpose of what they're doing buy in harder and execute better.</div>
+    </div>
+  </div>
+  <div class="rule-card">
+    <div class="rule-num">2</div>
+    <div>
+      <div class="rule-title">Train Gradual, Phase By Phase</div>
+      <div class="rule-body">Do not jump to Speed work before Endurance and Strength phases are complete. Build the foundation first. Shortcuts in training show up as injuries and plateaus during the season.</div>
+    </div>
+  </div>
+  <div class="rule-card">
+    <div class="rule-num">3</div>
+    <div>
+      <div class="rule-title">Rest Is Not Optional — It's Part of the Workout</div>
+      <div class="rule-body">In Speed and Strength phases, rest intervals are prescribed for a reason. Cutting rest short means the next rep is lower quality. If the goal is high-speed, high-intensity output, the athlete must be recovered to produce it. Don't skip rest.</div>
+    </div>
+  </div>
+  <div class="rule-card">
+    <div class="rule-num">4</div>
+    <div>
+      <div class="rule-title">Culture Is Non-Negotiable</div>
+      <div class="rule-body">We run with dignity and class. This is enforced daily, not just on meet days. An athlete who disrespects another team, a coach, or the sport is an athlete who is embarrassing everything we stand for. Address it immediately.</div>
+    </div>
+  </div>
+  <div class="rule-card">
+    <div class="rule-num">5</div>
+    <div>
+      <div class="rule-title">Know What You Don't Know</div>
+      <div class="rule-body">This packet is a starting point, not an end point. Coach Lewis's knowledge is not the final word on sprint coaching — it's a foundation. When you're unsure, reference the Altis resources and The Sprint Project materials included here. Keep learning.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <div class="sub-heading">The 5 Golden Rules (The Sprint Project)</div>
+  <div class="section-intro">These are universal sprint training principles backed by research. Apply them to every phase of the season.</div>
+
+  <div class="golden-rule">
+    <div class="golden-num">1</div>
+    <div>
+      <div class="golden-title">48–72 Hour Recovery Between Hard Sessions</div>
+      <div class="golden-body">After a high-intensity sprint session, the National Strength and Conditioning Association recommends 48–72 hours before another hard session. The nervous system takes longer to recover than the muscles. Respect this or athletes will plateau and break down.</div>
+    </div>
+  </div>
+  <div class="golden-rule">
+    <div class="golden-num">2</div>
+    <div>
+      <div class="golden-title">Quality Over Quantity</div>
+      <div class="golden-body">Sprinting more does not make you faster if the quality is low. High-quality sprints require being well rested, using max or near-max effort, and executing proper technique. A tired athlete running sloppy reps is building bad habits, not speed.</div>
+    </div>
+  </div>
+  <div class="golden-rule">
+    <div class="golden-num">3</div>
+    <div>
+      <div class="golden-title">1 Step Back, 2 Steps Forward</div>
+      <div class="golden-body">If an athlete is exhausted or close to injury, it's better to take one step back and recover so they can take two steps forward in long-term progress. Pain warns gradually. Listen to it before it becomes an injury that costs weeks.</div>
+    </div>
+  </div>
+  <div class="golden-rule">
+    <div class="golden-num">4</div>
+    <div>
+      <div class="golden-title">If You Can't Measure It, You Can't Improve It</div>
+      <div class="golden-body">Track athlete times — 30m acceleration, 30m fly, 10m fly are the key sprint metrics. Without tracking, you're guessing. With tracking, you can see what's working and what's not. Keep records.</div>
+    </div>
+  </div>
+  <div class="golden-rule">
+    <div class="golden-num">5</div>
+    <div>
+      <div class="golden-title">Sleep Is the Magic Pill</div>
+      <div class="golden-body">Sleep is when the muscles, CNS, and brain recover and recharge. Athletes sleeping less than 7–9 hours are limiting their own performance. Remind your athletes that recovery happens off the track too.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ====================== WORKOUT LIBRARY ====================== -->
+<div class="tab-content" id="tab-sprints">
+  <div class="section-label">Sprints</div>
+  <div class="section-title">Sprint Workouts</div>
+  <div class="section-intro">All sprint-specific sessions organized by training phase. Click any workout to expand full details, pacing, and coaching notes.</div>
+
+  <div class="workout-filter">
+    <button class="filter-btn active" onclick="filterWorkouts2('all', this)">All</button>
+    <button class="filter-btn endurance" onclick="filterWorkouts2('endurance', this)">Endurance</button>
+    <button class="filter-btn strength" onclick="filterWorkouts2('strength', this)">Strength</button>
+    <button class="filter-btn speed" onclick="filterWorkouts2('speed', this)">Speed</button>
+  </div>
+
+  <div class="workout-item" data-phase2="endurance">
+    <div class="workout-header" onclick="toggleWorkout(this)">
+      <span class="workout-phase-tag tag-endurance">Endurance</span>
+      <span class="workout-name">Broken Ladders</span>
+      <span class="workout-type-tag">Volume · Conditioning</span>
+      <span class="workout-chevron">▼</span>
+    </div>
+    <div class="workout-body">
+      <p>Pyramid runs where each rep is split in half with 1 minute rest in the middle. Volume increases week over week. This is the backbone of pre-season conditioning.</p>
+      <table class="workout-table">
+        <tr><th>Level</th><th>Structure</th><th>Men (each half)</th><th>Women (each half)</th></tr>
+        <tr><td>Early Pre-Season</td><td>100 / 200 / 300 / 200 / 100</td><td>10s / 17s / 26s</td><td>15s / 20s / 31s</td></tr>
+        <tr><td>Mid Pre-Season</td><td>200 / 300 / 400 / 300 / 200</td><td>17s / 26s / 35s</td><td>20s / 31s / 40s</td></tr>
+        <tr><td>Late Pre-Season</td><td>300 / 400 / 500 / 400 / 300</td><td>26s / 35s / 42s</td><td>31s / 40s / 50s</td></tr>
+      </table>
+      <div class="workout-note">Each distance is split in half with 1 min rest in the middle. Pacing is based on race performance — not all-out effort on every rep.</div>
+    </div>
+  </div>
+
+  <div class="workout-item" data-phase2="endurance">
+    <div class="workout-header" onclick="toggleWorkout(this)">
+      <span class="workout-phase-tag tag-endurance">Endurance</span>
+      <span class="workout-name">400 Hard Ways</span>
+      <span class="workout-type-tag">Volume · Conditioning</span>
+      <span class="workout-chevron">▼</span>
+    </div>
+    <div class="workout-body">
+      <p>Week 1 staple. 1 lap at 90% with full rest between. Veterans add an extra lap. Sets the tone for the season — athletes who give less than 90% need to be addressed early.</p>
+      <table class="workout-table">
+        <tr><th>Group</th><th>Reps</th><th>Effort</th><th>Rest</th></tr>
+        <tr><td>Standard</td><td>1 lap</td><td>90%</td><td>Full rest</td></tr>
+        <tr><td>Veterans</td><td>2 laps</td><td>90%</td><td>Full rest</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="workout-item" data-phase2="endurance">
+    <div class="workout-header" onclick="toggleWorkout(this)">
+      <span class="workout-phase-tag tag-endurance">Endurance</span>
+      <span class="workout-name">4 Corners Circuit</span>
+      <span class="workout-type-tag">Bodyweight · Conditioning</span>
+      <span class="workout-chevron">▼</span>
+    </div>
+    <div class="workout-body">
+      <p>Two-lap circuit using the corners of the track. 10 reps of each exercise at each corner, 100m jog between. Hits legs, core, arms, and full body in rotation.</p>
+      <table class="workout-table">
+        <tr><th>Lap</th><th>Corner 1 (Legs)</th><th>Corner 2 (Core)</th><th>Corner 3 (Arms)</th><th>Corner 4 (Full Body)</th></tr>
+        <tr><td>Lap 1</td><td>Prisoner Squats</td><td>Sit Ups</td><td>Push Ups</td><td>Burpees</td></tr>
+        <tr><td>Lap 2</td><td>Lunges</td><td>60sec Plank</td><td>Push Ups</td><td>Mountain Climbers</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="workout-item" data-phase2="endurance">
+    <div class="workout-header" onclick="toggleWorkout(this)">
+      <span class="workout-phase-tag tag-endurance">Endurance</span>
+      <span class="workout-name">Mt. Rubidoux Hill Run</span>
+      <span class="workout-type-tag">Hill · Endurance</span>
+      <span class="workout-chevron">▼</span>
+    </div>
+    <div class="workout-body">
+      <p>Saturday pre-season work. Jog 2 miles up, walk back down. Aerobic base building — pace is conversational, not a sprint. Team bonding and base building in one.</p>
+      <table class="workout-table">
+        <tr><th>Pre-Season Week</th><th>Meet Time</th></tr>
+        <tr><td>Weeks 1–3</td><td>8:00 AM</td></tr>
+        <tr><td>Week 4 (last hill)</td><td>6:00 AM</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="workout-item" data-phase2="strength">
+    <div class="workout-header" onclick="toggleWorkout(this)">
+      <span class="workout-phase-tag tag-strength">Strength</span>
+      <span class="workout-name">Sled Pulls</span>
+      <span class="workout-type-tag">Resisted Sprint · Power</span>
+      <span class="workout-chevron">▼</span>
+    </div>
+    <div class="workout-body">
+      <p>One of the most effective tools for improving 0–40m sprint ability. Overloads hip extension and forces proper start mechanics under load. Do not skip these.</p>
+      <table class="workout-table">
+        <tr><th>Group</th><th>Load</th><th>Distance</th><th>Sets/Reps</th></tr>
+        <tr><td>Girls</td><td>20 lbs</td><td>15 meters</td><td>4–6 reps</td></tr>
+        <tr><td>Boys</td><td>50 lbs</td><td>15 meters</td><td>4–6 reps</td></tr>
+      </table>
+      <div class="workout-note">Focus on the first 3–5 steps. Full rest between reps. Forward lean and full arm drive required.</div>
+    </div>
+  </div>
+
+  <div class="workout-item" data-phase2="strength">
+    <div class="workout-header" onclick="toggleWorkout(this)">
+      <span class="workout-phase-tag tag-strength">Strength</span>
+      <span class="workout-name">Wall Plyometrics + Jump Series</span>
+      <span class="workout-type-tag">Explosive · Plyometric</span>
+      <span class="workout-chevron">▼</span>
+    </div>
+    <div class="workout-body">
+      <p>Wall plyos target hip drive, ankle stiffness, and single-leg power. Jump series is used as the Monday explosive opener before technical work.</p>
+      <table class="workout-table">
+        <tr><th>Wall Plyos (2×10)</th><th>Jump Series (10 yds × 2)</th></tr>
+        <tr><td>Step Ups</td><td>Skips for Height</td></tr>
+        <tr><td>Jump Ups</td><td>Skips for Distance</td></tr>
+        <tr><td>One Leg Shuffles</td><td>Single Leg L/R/R</td></tr>
+        <tr><td>Step Down Hops</td><td>Medial Hops · Lateral Hops</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="workout-item" data-phase2="strength">
+    <div class="workout-header" onclick="toggleWorkout(this)">
+      <span class="workout-phase-tag tag-strength">Strength</span>
+      <span class="workout-name">Bounding + Wickets</span>
+      <span class="workout-type-tag">Power · Stride Rate</span>
+      <span class="workout-chevron">▼</span>
+    </div>
+    <div class="workout-body">
+      <p>Bounding builds horizontal force that transfers directly to acceleration. Wickets train stride frequency and correct over-striding (vertical bounce).</p>
+      <table class="workout-table">
+        <tr><th>Exercise</th><th>Prescription</th></tr>
+        <tr><td>Bounding</td><td>30 yards × 6 reps</td></tr>
+        <tr><td>Wickets (40m)</td><td>2 reps</td></tr>
+        <tr><td>Wickets (60m)</td><td>1 rep</td></tr>
+        <tr><td>Wickets (80m)</td><td>1 rep</td></tr>
+      </table>
+      <div class="workout-note">Wicket spacing follows the Hurdle/Wicket Cheat Sheet by level. Watch for over-striding, heel recovery, and lateral swing.</div>
+    </div>
+  </div>
+
+  <div class="workout-item" data-phase2="strength">
+    <div class="workout-header" onclick="toggleWorkout(this)">
+      <span class="workout-phase-tag tag-strength">Strength</span>
+      <span class="workout-name">200 Repeats</span>
+      <span class="workout-type-tag">Volume · Race Prep</span>
+      <span class="workout-chevron">▼</span>
+    </div>
+    <div class="workout-body">
+      <p>Bridge between endurance and speed phases. Controlled 200s at race pace with structured rest. Volume and pace targets tighten as the season progresses.</p>
+      <table class="workout-table">
+        <tr><th>Week</th><th>Reps</th><th>Men</th><th>Women</th><th>Rest</th></tr>
+        <tr><td>Season Wk 4</td><td>5 + 5</td><td>32s / 34s</td><td>37s / 39s</td><td>3–5 min + 8–10 min break</td></tr>
+        <tr><td>Season Wk 5</td><td>7</td><td>31s</td><td>36s</td><td>5 min each</td></tr>
+      </table>
+      <div class="workout-note">Pacing based on 16–16.5s 100m for boys, 18–19s 100m for girls. Adjust for your athletes' actual fitness.</div>
+    </div>
+  </div>
+
+  <div class="workout-item" data-phase2="speed">
+    <div class="workout-header" onclick="toggleWorkout(this)">
+      <span class="workout-phase-tag tag-speed">Speed</span>
+      <span class="workout-name">Block Start Build-Up</span>
+      <span class="workout-type-tag">Starts · Acceleration</span>
+      <span class="workout-chevron">▼</span>
+    </div>
+    <div class="workout-body">
+      <p>Used every speed/starts day. Work through alternative start positions before progressing to blocks. Teaches mechanics through varied body positions before adding block complexity.</p>
+      <table class="workout-table">
+        <tr><th>Phase</th><th>Exercise</th><th>Reps</th></tr>
+        <tr><td>Build-Up</td><td>Falling Starts</td><td>3×20m</td></tr>
+        <tr><td>Build-Up</td><td>Hop Back / Crouching / Push-Up Starts</td><td>3×20m</td></tr>
+        <tr><td>Blocks Short</td><td>Block starts 15m</td><td>5 reps</td></tr>
+        <tr><td>Blocks Mid</td><td>Block starts 25m</td><td>3 reps</td></tr>
+        <tr><td>Blocks Long</td><td>Block starts 50m</td><td>1 rep</td></tr>
+      </table>
+      <div class="workout-note">These are max-effort reps — not conditioning. Full rest between every block rep.</div>
+    </div>
+  </div>
+
+  <div class="workout-item" data-phase2="speed">
+    <div class="workout-header" onclick="toggleWorkout(this)">
+      <span class="workout-phase-tag tag-speed">Speed</span>
+      <span class="workout-name">Lactic Training — 8×200 @ 70%</span>
+      <span class="workout-type-tag">Speed Endurance · Lactic</span>
+      <span class="workout-chevron">▼</span>
+    </div>
+    <div class="workout-body">
+      <p>Teaches athletes to maintain form and compete under fatigue. Split rest structure trains race-specific endurance without destroying recovery.</p>
+      <table class="workout-table">
+        <tr><th>Structure</th><th>Details</th></tr>
+        <tr><td>Total Reps</td><td>8 × 200m @ 70%</td></tr>
+        <tr><td>Short Rest (reps 1–4, 5–8)</td><td>50m jog out, 50m walk back</td></tr>
+        <tr><td>Long Rest (between groups)</td><td>8 minutes</td></tr>
+        <tr><td>Men's Pace</td><td>~36 seconds</td></tr>
+        <tr><td>Women's Pace</td><td>~40 seconds</td></tr>
+      </table>
+      <div class="workout-note">70% is honest — not jogging, not sprinting. If form is breaking down, they're going too fast. Run clockwise when specified.</div>
+    </div>
+  </div>
+
+  <div class="workout-item" data-phase2="speed">
+    <div class="workout-header" onclick="toggleWorkout(this)">
+      <span class="workout-phase-tag tag-speed">Speed</span>
+      <span class="workout-name">A-S-F Zones (60m)</span>
+      <span class="workout-type-tag">Max Velocity · Speed</span>
+      <span class="workout-chevron">▼</span>
+    </div>
+    <div class="workout-body">
+      <p>Zone-based sprint work targeting acceleration, speed, and fly phases in a single run. Athletes build into max velocity by the fly zone. Full rest between reps.</p>
+      <table class="workout-table">
+        <tr><th>Zone</th><th>Distance</th><th>Intent</th></tr>
+        <tr><td>A — Acceleration</td><td>0–20m</td><td>Drive phase, build speed</td></tr>
+        <tr><td>S — Speed</td><td>20–40m</td><td>Upright, top speed approach</td></tr>
+        <tr><td>F — Fly</td><td>40–60m</td><td>Max velocity, full expression</td></tr>
+      </table>
+      <p>4 reps total. Full rest between each rep.</p>
+    </div>
+  </div>
+
+  <div class="workout-item" data-phase2="speed">
+    <div class="workout-header" onclick="toggleWorkout(this)">
+      <span class="workout-phase-tag tag-speed">Speed</span>
+      <span class="workout-name">Wickets to Sprint</span>
+      <span class="workout-type-tag">Speed · Transition</span>
+      <span class="workout-chevron">▼</span>
+    </div>
+    <div class="workout-body">
+      <p>Combines wicket rhythm work with a transition into full sprint. Develops the ability to reach top speed from a controlled rhythm start.</p>
+      <table class="workout-table">
+        <tr><th>Distance</th><th>Reps</th></tr>
+        <tr><td>Wickets → 40m sprint</td><td>2</td></tr>
+        <tr><td>Wickets → 60m sprint</td><td>1</td></tr>
+        <tr><td>Wickets → 80m sprint</td><td>1</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="workout-note" style="margin-top:8px;">
+    📋 <strong>Coming — Speed Phase:</strong> Bungee and parachute workouts belong here but weren't implemented this season. Bungee/tubing = overspeed assistance. Parachute = resisted max-velocity work. Ask Coach Lewis for demos before using.
+  </div>
+</div>
+
+<!-- ====================== HURDLES ====================== -->
+<div class="tab-content" id="tab-hurdles">
+  <div class="section-label">Hurdles</div>
+  <div class="section-title">Hurdle Workouts & Reference</div>
+  <div class="section-intro">Everything specific to the hurdle group — drills, progressions, event specs, and the commandments. Sprinters can skip this tab. Hurdlers live here.</div>
+
+  <div class="sub-heading">The Hurdle Commandments</div>
+  <div class="card" style="border-left: 3px solid var(--gold);">
+    <div class="card-title" style="color:var(--gold);">5 Laws of the Hurdler</div>
+    <div style="display:flex; flex-direction:column; gap:10px; margin-top:12px;">
+      <div class="rule-card" style="margin-bottom:0; background:rgba(232,200,74,0.05); border:1px solid rgba(232,200,74,0.2);">
+        <div class="rule-num" style="color:var(--gold); font-size:1.2rem;">I.</div>
+        <div><div class="rule-title">Thou shall not go over a backwards hurdle</div><div class="rule-body">Safety first. Stop practice if needed. A backwards hurdle is a broken hurdle waiting to happen.</div></div>
+      </div>
+      <div class="rule-card" style="margin-bottom:0; background:rgba(232,200,74,0.05); border:1px solid rgba(232,200,74,0.2);">
+        <div class="rule-num" style="color:var(--gold); font-size:1.2rem;">II.</div>
+        <div><div class="rule-title">Thou shall not stutter step</div><div class="rule-body">Stutter stepping at the hurdle is fear in disguise. Attack. Drive. Commit to the stride pattern.</div></div>
+      </div>
+      <div class="rule-card" style="margin-bottom:0; background:rgba(232,200,74,0.05); border:1px solid rgba(232,200,74,0.2);">
+        <div class="rule-num" style="color:var(--gold); font-size:1.2rem;">III.</div>
+        <div><div class="rule-title">Thou shall clap if a teammate falls</div><div class="rule-body">We do not laugh. We do not panic. We clap. Falling is part of hurdling. Getting back up is who we are.</div></div>
+      </div>
+      <div class="rule-card" style="margin-bottom:0; background:rgba(232,200,74,0.05); border:1px solid rgba(232,200,74,0.2);">
+        <div class="rule-num" style="color:var(--gold); font-size:1.2rem;">IV.</div>
+        <div><div class="rule-title">Thou shall not coward away from a hurdle</div><div class="rule-body">Mental toughness is a skill. Every time an athlete dodges a hurdle they are training themselves to be afraid of it.</div></div>
+      </div>
+      <div class="rule-card" style="margin-bottom:0; background:rgba(232,200,74,0.05); border:1px solid rgba(232,200,74,0.2);">
+        <div class="rule-num" style="color:var(--gold); font-size:1.2rem;">V.</div>
+        <div><div class="rule-title">Thou shall keep arms and legs inside the ride at all times</div><div class="rule-body">Clean form over every barrier — arms drive forward, trail leg snaps through. No flailing.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <div class="sub-heading">Event Specifications</div>
+  <table class="workout-table" style="margin-bottom:24px;">
+    <tr><th>Race</th><th>Division</th><th>Hurdles</th><th>Height</th><th>Dist to 1st</th><th>Between</th></tr>
+    <tr><td>60m</td><td>Intermediate Girls</td><td>5</td><td>33" (1st notch)</td><td>13.00m</td><td>8.50m</td></tr>
+    <tr><td>60m</td><td>Intermediate Boys</td><td>5</td><td>39" (4th notch)</td><td>13.72m</td><td>9.14m</td></tr>
+    <tr><td>100m</td><td>HS Girls</td><td>10</td><td>33" (1st notch)</td><td>13.00m</td><td>8.50m</td></tr>
+    <tr><td>110m</td><td>HS Boys</td><td>10</td><td>39" (4th notch)</td><td>13.72m</td><td>9.14m</td></tr>
+    <tr><td>300m</td><td>HS Girls</td><td>8</td><td>30" (no notch)</td><td>45m</td><td>35m</td></tr>
+    <tr><td>300m</td><td>HS Boys</td><td>8</td><td>36" (3rd notch)</td><td>45m</td><td>35m</td></tr>
+  </table>
+
+  <div class="sub-heading">Hurdle Drill Progressions</div>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title">1-Step Drill</div>
+      <p><strong style="color:var(--columbia)">Spacing:</strong> 6 feet</p>
+      <p><strong style="color:var(--columbia)">Men's Height:</strong> 30"</p>
+      <p><strong style="color:var(--columbia)">Women's Height:</strong> 27"</p>
+    </div>
+    <div class="card">
+      <div class="card-title">3-Step Drill</div>
+      <p><strong style="color:var(--columbia)">Spacing:</strong> 16 feet</p>
+      <p><strong style="color:var(--columbia)">Men's Height:</strong> 30"</p>
+      <p><strong style="color:var(--columbia)">Women's Height:</strong> 27"</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Gavin Step Drill</div>
+      <p><strong style="color:var(--columbia)">Pattern:</strong> 6"–6"–6"–15"–15" (5-step → 5-step)</p>
+      <p><strong style="color:var(--columbia)">Men:</strong> 30" → 39"</p>
+      <p><strong style="color:var(--columbia)">Women:</strong> 27" → 33"</p>
+    </div>
+  </div>
+
+  <div class="sub-heading">Weekly Hurdle Practice Structure</div>
+  <div class="card">
+    <div class="card-title">Hurdle Warm-Up Sequence</div>
+    <p><strong style="color:var(--columbia)">Hurdle Stretches:</strong> 2ea × 10sec — Bent Leg · Bent Leg to Straight · Trail Leg Hang · Glute Pull</p>
+    <p><strong style="color:var(--columbia)">Static Hurdle Mob:</strong> 2ea × 6 hurdles — Alternate Walkovers · Walkover L/R · 2 Forward 1 Back L/R · Over Under L/R</p>
+    <p><strong style="color:var(--columbia)">Dynamic Hurdle Mob:</strong> Bent Leg Middle · Straight Leg Side · Skipovers L/R · A-Skip OTT</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Fence Drills</div>
+    <p>Trail Leg Cadence 2×10ea · Lead Leg Jack Hammers 2×20ea</p>
+  </div>
+  <div class="card">
+    <div class="card-title">H-Drills</div>
+    <p><strong style="color:var(--columbia)">H-Drill A:</strong> Trail Leg Slide · Trail Leg 1,2,3,4 · Lead Leg Fence Kicks · Lead Leg A-Skips</p>
+    <p><strong style="color:var(--columbia)">H-Drill B:</strong> Jog-Stop-Snap Trail · 5-Step Trail Leg · 5-Step Lead Leg · 5-Step OTT</p>
+    <p><strong style="color:var(--columbia)">H-Drill C:</strong> 1-Step Trail · 1-Step OTT · 3-Step Trail · 3-Step OTT</p>
+    <p><strong style="color:var(--columbia)">Gavin Drill:</strong> 1-1-1-3-3-5-5 Step Trail · 1-1-1-3-3-5-5 Step OTT</p>
+  </div>
+
+  <div class="sub-heading">Run Throughs Progression</div>
+  <div class="card">
+    <div class="card-title">In-Season Hurdle Run Throughs</div>
+    <p><strong style="color:var(--columbia)">Early Season:</strong> Trail, Lead, OTT × 4ea over 3 hurdles</p>
+    <p><strong style="color:var(--columbia)">Mid Season:</strong> Trail Leg Hops 4H × 2ea · Step Drills 3-Step × 2 · Stride Progression 110H → 300H</p>
+    <p><strong style="color:var(--columbia)">Late Season:</strong> Trail Leg Walk Races 6H × 2ea · Gavin Drill 3 reps · Full stride progressions</p>
+  </div>
+
+  <div class="sub-heading">H-Crew System</div>
+  <div class="card">
+    <div class="card-title">Managing Hurdles at Meets</div>
+    <p>The H-Crew is a 10-person crew of sprinters assigned to manage hurdle stacks during hurdle races — one athlete per hurdle stack. Whoever is not hurdling in a given race is on H-Crew. Preassign before the meet — no scrambling at the track.</p>
+    <p>Each hurdle race is scheduled right after a distance event, so no sprinter should have a conflict. No excuses for skipping H-Crew duty.</p>
+    <div class="workout-note">H-Crew is a culture tool. Athletes who take care of the meet are invested in the team. It is not a punishment — it is a role. Treat it that way.</div>
+  </div>
+</div>
+
+<div class="tab-content" id="tab-warmup">
+  <div class="section-label">Section 4</div>
+  <div class="section-title">Warm-Up Guide</div>
+  <div class="section-intro">Every practice starts with a warm-up. The warm-up is not optional filler — it is the first rep of the day. Which warm-up you use depends on the phase of the season and the workout that follows.</div>
+
+  <div class="sub-heading">Team Start (All Warm-Ups)</div>
+  <div class="card">
+    <p><strong style="color:var(--columbia)">2 Laps</strong> at conversational pace, then <strong style="color:var(--columbia)">Static Stretches</strong> as a group, then <strong style="color:var(--columbia)">Team Meeting</strong> (attendance, announcements, intent for practice). This is non-negotiable. It sets the culture and focus before anyone runs a step.</p>
+  </div>
+
+  <div class="warmup-block">
+    <div class="warmup-header">
+      <div class="warmup-letter">A</div>
+      <div>
+        <div class="warmup-title">Warm-Up A — Dynamic Flex + Sprint Drills A</div>
+        <div class="warmup-subtitle">Used in: Conditioning days, early pre-season, recovery days</div>
+      </div>
+    </div>
+    <div class="warmup-content">
+      <p style="font-size:0.82rem;color:var(--gray);margin-bottom:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;">Dynamic Flex</p>
+      <ul class="drill-list">
+        <li>Alt Lunges</li><li>Side Lunges</li><li>Flamingos</li><li>Pigeons</li>
+        <li>Frankensteins</li><li>Ballerinas</li><li>Leg Scoops</li><li>A March</li>
+      </ul>
+      <p style="font-size:0.82rem;color:var(--gray);margin:14px 0 10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;">Sprint Drills A</p>
+      <ul class="drill-list">
+        <li>Butt Kicks</li><li>High Knees</li><li>A-Skip</li><li>B-Skip</li>
+        <li>C-Skip Fwd / Bkwd</li><li>Bunny Hops</li><li>Cariocas</li><li>Strt Leg Bnd Prog</li>
+      </ul>
+      <p style="font-size:0.82rem;color:var(--gray);margin:14px 0 10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;">Finish With</p>
+      <ul class="drill-list"><li>3 Accelerations</li></ul>
+    </div>
+  </div>
+
+  <div class="warmup-block">
+    <div class="warmup-header">
+      <div class="warmup-letter">B</div>
+      <div>
+        <div class="warmup-title">Warm-Up B — Sprint Drills B</div>
+        <div class="warmup-subtitle">Used in: Speed days, starts days, mid-season meets</div>
+      </div>
+    </div>
+    <div class="warmup-content">
+      <p style="font-size:0.82rem;color:var(--gray);margin-bottom:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;">Sprint Drills B</p>
+      <ul class="drill-list">
+        <li>A March</li><li>Butt Kicks</li><li>A Skip</li><li>B Skip</li>
+        <li>ACA Skip</li><li>Str Leg Bnd Fast</li><li>Str Leg Bnd Long</li><li>Fast Legs L/R</li>
+      </ul>
+      <p style="font-size:0.82rem;color:var(--gray);margin:14px 0 10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;">Dynamic Flex (BKWD Lunges version)</p>
+      <ul class="drill-list">
+        <li>BKWD Lunges</li><li>Knee Pulls</li><li>Flamingos</li><li>Pigeons</li>
+        <li>Frankensteins</li><li>Ballerinas</li><li>Leg Scoops</li><li>A March</li>
+      </ul>
+      <p style="font-size:0.82rem;color:var(--gray);margin:14px 0 10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;">Finish With</p>
+      <ul class="drill-list"><li>3 Accelerations with Spikes</li></ul>
+    </div>
+  </div>
+
+  <div class="warmup-block">
+    <div class="warmup-header">
+      <div class="warmup-letter">C</div>
+      <div>
+        <div class="warmup-title">Warm-Up C — Walking Series + Fence Drills (Hurdlers)</div>
+        <div class="warmup-subtitle">Used in: Hurdle days, event practice, recovery days</div>
+      </div>
+    </div>
+    <div class="warmup-content">
+      <p style="font-size:0.82rem;color:var(--gray);margin-bottom:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;">Walking Series</p>
+      <ul class="drill-list">
+        <li>Toe Walks Fwd/Bkwd</li><li>Heel Walks Fwd/Bwd</li>
+        <li>Inside Foot Walk</li><li>Outside Foot Walk</li>
+        <li>Squat Walk</li><li>Lateral Squat Walk</li>
+      </ul>
+      <p style="font-size:0.82rem;color:var(--gray);margin:14px 0 10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;">Fence Drills (Hurdlers)</p>
+      <ul class="drill-list">
+        <li>Leg Swing Sagittal</li><li>Leg Swings Frontal</li>
+        <li>Trail Leg Windmills</li><li>Lunge Exchange</li>
+        <li>Donkey Kicks</li><li>Leg Switches</li>
+        <li>Leg Cycles L/R</li>
+      </ul>
+      <p style="font-size:0.82rem;color:var(--gray);margin:14px 0 10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;">Finish With</p>
+      <ul class="drill-list"><li>3 Accelerations</li></ul>
+    </div>
+  </div>
+
+  <div class="sub-heading">Cool Downs</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Cool Down A</div>
+      <p>Static Hurdle Mobility (2ea × 6H) · 2 Inner Laps (conversational jog) · Static Stretch</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Cool Down B</div>
+      <p>General Strength Circuit (Sequoia, Palm, or coach's choice) · Gut 40s · Static Stretch</p>
+    </div>
+  </div>
+
+  <div class="sub-heading">Static Stretch Sequence</div>
+  <div class="card">
+    <div class="card-title">Full Static Stretch List</div>
+    <p>Run through both standing and sitting sequences at the end of every practice. Hold each stretch 20–30 seconds. This is non-negotiable — athletes who skip stretching are athletes who get hurt.</p>
+    <div class="grid-2" style="margin-top:14px;">
+      <div>
+        <p style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--columbia);margin-bottom:10px;font-weight:700;">Standing</p>
+        <ul class="drill-list" style="grid-template-columns:1fr;">
+          <li>Legs apart — down the middle</li>
+          <li>Legs apart — side to side</li>
+          <li>Right over left</li>
+          <li>Left over right</li>
+          <li>Flamingos (quad stretch)</li>
+        </ul>
+      </div>
+      <div>
+        <p style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--columbia);margin-bottom:10px;font-weight:700;">Sitting</p>
+        <ul class="drill-list" style="grid-template-columns:1fr;">
+          <li>Butterfly's</li>
+          <li>Right leg out, left in</li>
+          <li>Left leg out, right in</li>
+          <li>Pretzels</li>
+          <li>Figure 4's</li>
+          <li>Calves (single leg)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====================== LIFTING ====================== -->
+<div class="tab-content" id="tab-lifts">
+  <div class="section-label">Section 5</div>
+  <div class="section-title">Lifting Program</div>
+  <div class="section-intro">The lift program transitions with the season phases. Pre-season uses Bodybuilding Lifts to build structural strength and muscle. In-season transitions to Powerlifting to develop explosiveness and race-specific power. Never skip lifting — the weight room directly affects sprint performance.</div>
+
+  <div class="workout-note" style="margin-bottom:24px;">From "Smashing PRs 101" (Sprint Project): Research by Dr. Peter Weyand and PhD J.B. Morin confirms that producing ground force is essential to speed. Skipping the weight room severely limits performance. Eccentric lifting also reduces injury risk.</div>
+
+  <div class="sub-heading">Phase 1 — Bodybuilding Lifts (Pre-Season)</div>
+  <div class="lift-block">
+    <div class="lift-header">
+      <div class="lift-title">Bodybuilding Lifts</div>
+      <div class="lift-scheme">Pick 5 Exercises · 3 Sets × 10 Reps</div>
+    </div>
+    <div class="lift-content">
+      <div class="lift-category">Upper Body (Pick 5)</div>
+      <div class="lift-pill-grid">
+        <span class="lift-pill">Lat Pull Down</span>
+        <span class="lift-pill">Military Press</span>
+        <span class="lift-pill">Lateral DB Raise</span>
+        <span class="lift-pill">Frontal DB Raise</span>
+        <span class="lift-pill">Arm Curls</span>
+        <span class="lift-pill">DB Rows</span>
+        <span class="lift-pill">Pull Ups</span>
+        <span class="lift-pill">Bench Press</span>
+        <span class="lift-pill">Shrugs</span>
+      </div>
+      <div class="lift-category">Lower Body (Pick 5)</div>
+      <div class="lift-pill-grid">
+        <span class="lift-pill">Squats</span>
+        <span class="lift-pill">Leg Curls</span>
+        <span class="lift-pill">Leg Extensions</span>
+        <span class="lift-pill">Calf Raises</span>
+        <span class="lift-pill">Single Leg Press</span>
+        <span class="lift-pill">Bulgarian Squat</span>
+        <span class="lift-pill">Back Extensions</span>
+        <span class="lift-pill">Goodmornings</span>
+        <span class="lift-pill">Hang Cleans</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-heading">Phase 2 — Power Lifting (In-Season)</div>
+  <div class="grid-3">
+    <div class="lift-block">
+      <div class="lift-header">
+        <div class="lift-title">Arm Strength</div>
+        <div class="lift-scheme">Compound + Aux</div>
+      </div>
+      <div class="lift-content">
+        <div class="lift-category">Compound — Progressive Load</div>
+        <p style="font-size:0.8rem;color:var(--gray);margin-bottom:8px;">1×10@50% · 1×8@60% · 1×6@70% · 1×4@80%</p>
+        <div class="lift-pill-grid"><span class="lift-pill" style="background:rgba(232,200,74,0.1);border-color:rgba(232,200,74,0.2);color:var(--gold);">Bench Press</span></div>
+        <div class="lift-category">Auxiliary — 3×10 @ 60%</div>
+        <div class="lift-pill-grid">
+          <span class="lift-pill">Pull Ups</span>
+          <span class="lift-pill">Bent Over Rows</span>
+          <span class="lift-pill">Tricep Dips</span>
+        </div>
+      </div>
+    </div>
+    <div class="lift-block">
+      <div class="lift-header">
+        <div class="lift-title">Leg Strength</div>
+        <div class="lift-scheme">Compound + Aux</div>
+      </div>
+      <div class="lift-content">
+        <div class="lift-category">Compound — Progressive Load</div>
+        <p style="font-size:0.8rem;color:var(--gray);margin-bottom:8px;">1×10@50% · 1×8@60% · 1×6@70% · 1×4@80%</p>
+        <div class="lift-pill-grid"><span class="lift-pill" style="background:rgba(232,200,74,0.1);border-color:rgba(232,200,74,0.2);color:var(--gold);">Front Squat</span></div>
+        <div class="lift-category">Auxiliary — 3×10 @ 60%</div>
+        <div class="lift-pill-grid">
+          <span class="lift-pill">Rocket Jumps</span>
+          <span class="lift-pill">RDLs</span>
+          <span class="lift-pill">Step-Ups</span>
+        </div>
+      </div>
+    </div>
+    <div class="lift-block">
+      <div class="lift-header">
+        <div class="lift-title">Explosive</div>
+        <div class="lift-scheme">Compound + Aux</div>
+      </div>
+      <div class="lift-content">
+        <div class="lift-category">Compound — Progressive Load</div>
+        <p style="font-size:0.8rem;color:var(--gray);margin-bottom:8px;">1×10@50% · 1×8@60% · 1×6@70% · 1×4@80%</p>
+        <div class="lift-pill-grid"><span class="lift-pill" style="background:rgba(232,200,74,0.1);border-color:rgba(232,200,74,0.2);color:var(--gold);">Hang Clean</span></div>
+        <div class="lift-category">Auxiliary — 3×10 @ 60%</div>
+        <div class="lift-pill-grid">
+          <span class="lift-pill">Hip Thrust</span>
+          <span class="lift-pill">Box Jumps</span>
+          <span class="lift-pill">MB Wall Slams</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-heading">General Strength Circuits (Cool Down / Active Recovery)</div>
+  <div class="grid-2">
+    <div class="strength-circuit">
+      <div class="circuit-header">
+        <div class="circuit-name">Citrus MB</div>
+        <div class="circuit-tag">Med Ball Core</div>
+      </div>
+      <div class="circuit-exercises">
+        <span class="exercise-chip">SNG Leg Lateral Toss</span><span class="exercise-chip">Stand Overhead Fwd</span>
+        <span class="exercise-chip">V-Sits</span><span class="exercise-chip">Goodmorning</span>
+        <span class="exercise-chip">Seat Hip L/R</span><span class="exercise-chip">Rotation Exchange</span>
+        <span class="exercise-chip">SNG Leg Shldr Toss L/R</span><span class="exercise-chip">Medial Knee Toss L/R</span>
+        <span class="exercise-chip">Toe Toss</span><span class="exercise-chip">Supermans</span>
+        <span class="exercise-chip">Reach and Hike</span>
+      </div>
+    </div>
+    <div class="strength-circuit">
+      <div class="circuit-header">
+        <div class="circuit-name">Redwood</div>
+        <div class="circuit-tag">Posterior Chain</div>
+      </div>
+      <div class="circuit-exercises">
+        <span class="exercise-chip">V-Sits</span><span class="exercise-chip">Back Hypers</span>
+        <span class="exercise-chip">Side Crunches</span><span class="exercise-chip">Leg Bridge</span>
+        <span class="exercise-chip">Crunches</span><span class="exercise-chip">Russian Twist</span>
+        <span class="exercise-chip">Back Hyper Twist</span><span class="exercise-chip">Crunches Twist</span>
+        <span class="exercise-chip">Windshield Wipers</span><span class="exercise-chip">Feet 6" Hold</span>
+        <span class="exercise-chip">Bicycles</span>
+      </div>
+    </div>
+    <div class="strength-circuit">
+      <div class="circuit-header">
+        <div class="circuit-name">Sequoia</div>
+        <div class="circuit-tag">Lower Body / Core</div>
+      </div>
+      <div class="circuit-exercises">
+        <span class="exercise-chip">Push Ups</span><span class="exercise-chip">Prisoner Squat</span>
+        <span class="exercise-chip">One Leg Bridge</span><span class="exercise-chip">Rocket Jumps</span>
+        <span class="exercise-chip">Dips</span><span class="exercise-chip">Lateral Squats</span>
+        <span class="exercise-chip">Alternate Hypers</span><span class="exercise-chip">Windshield Wipers</span>
+        <span class="exercise-chip">Split Leg Jumps</span><span class="exercise-chip">Russian Twist</span>
+        <span class="exercise-chip">Stationary Lunges</span>
+      </div>
+    </div>
+    <div class="strength-circuit">
+      <div class="circuit-header">
+        <div class="circuit-name">Palm</div>
+        <div class="circuit-tag">Full Body</div>
+      </div>
+      <div class="circuit-exercises">
+        <span class="exercise-chip">Prisoner Squats</span><span class="exercise-chip">V-Sits</span>
+        <span class="exercise-chip">Push Up w/ Twist</span><span class="exercise-chip">Back Hyper w/ Twist</span>
+        <span class="exercise-chip">Rocket Jumps</span><span class="exercise-chip">Bicycles</span>
+        <span class="exercise-chip">Hip Bridge</span><span class="exercise-chip">Fire Hydrants</span>
+        <span class="exercise-chip">Side Crunches</span><span class="exercise-chip">Mountain Climbers</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====================== TECHNIQUE & DIAGNOSIS ====================== -->
+<div class="tab-content" id="tab-technique">
+  <div class="section-label">Section 6</div>
+  <div class="section-title">Technique & Diagnosis</div>
+  <div class="section-intro">Your job as a sprint coach is to watch athletes run and know what you're looking at. This section gives you the tools to identify technique problems and prescribe the right corrective exercises. Start with the checklists, then use the flowchart to match mistakes to solutions.</div>
+
+  <div class="sub-heading">How To Use This System</div>
+  <div class="card" style="border-left: 3px solid var(--columbia);">
+    <p><strong style="color:var(--columbia)">Step 1:</strong> Watch the athlete run. Use the three checklists (Start, Horizontal, Vertical) to score their technique. You're looking for what's missing.</p>
+    <p><strong style="color:var(--columbia)">Step 2:</strong> Identify which category their weakness falls into — Start, Horizontal (forward drive), or Vertical (leg cycle).</p>
+    <p><strong style="color:var(--columbia)">Step 3:</strong> Match the mistake to the Solutions Flowchart below. Select 2–3 corrective exercises and add them to the technical section of their next session.</p>
+    <p><strong style="color:var(--columbia)">Step 4:</strong> Stay on those exercises until you see improvement, then reassess. Don't keep changing what you're working on.</p>
+  </div>
+
+  <div class="sub-heading">Start Checklist (Score out of 6)</div>
+  <div class="checklist-block">
+    <div class="checklist-header">
+      <div class="checklist-icon">🏁</div>
+      <div class="checklist-title">Elite Start — KPIs</div>
+      <div class="checklist-objective">Objective: Launch fast. Fly far.</div>
+    </div>
+    <div class="checklist-body">
+      <div class="kpi-row"><span class="kpi-name">Hips projecting far</span><span class="kpi-points">2 points</span></div>
+      <div class="kpi-row"><span class="kpi-name">45° posture or lower</span><span class="kpi-points">1 point</span></div>
+      <div class="kpi-row"><span class="kpi-name">Mostly straight line from neck to toe</span><span class="kpi-points">1 point</span></div>
+      <div class="kpi-row"><span class="kpi-name">Foot Retraction</span><span class="kpi-points">2 points</span></div>
+      <div class="kpi-row"><span class="kpi-name">Fast reaction</span><span class="kpi-points">2 points</span></div>
+    </div>
+  </div>
+
+  <div class="sub-heading">Horizontal Checklist (Score out of 9)</div>
+  <div class="checklist-block">
+    <div class="checklist-header">
+      <div class="checklist-icon">⚡</div>
+      <div class="checklist-title">Elite Horizontal Ability — KPIs</div>
+      <div class="checklist-objective">Objective: Apply max horizontal force, fast, over distance.</div>
+    </div>
+    <div class="checklist-body">
+      <div class="kpi-row"><span class="kpi-name">Low Heel Recovery (on first steps)</span><span class="kpi-points">2 points</span></div>
+      <div class="kpi-row"><span class="kpi-name">The Slice (foot strike)</span><span class="kpi-points">2 points</span></div>
+      <div class="kpi-row"><span class="kpi-name">Ankle Stiffness</span><span class="kpi-points">1 point</span></div>
+      <div class="kpi-row"><span class="kpi-name">Increasing stride length</span><span class="kpi-points">2 points</span></div>
+      <div class="kpi-row"><span class="kpi-name">Shin angle rises gradually</span><span class="kpi-points">2 points</span></div>
+    </div>
+  </div>
+
+  <div class="sub-heading">Vertical Checklist (Score out of 7)</div>
+  <div class="checklist-block">
+    <div class="checklist-header">
+      <div class="checklist-icon">🔄</div>
+      <div class="checklist-title">Elite Vertical Ability — KPIs</div>
+      <div class="checklist-objective">Objective: Apply vertical force fast, over necessary distance.</div>
+    </div>
+    <div class="checklist-body">
+      <div class="kpi-row"><span class="kpi-name">Foot strike near the COG</span><span class="kpi-points">1 point</span></div>
+      <div class="kpi-row"><span class="kpi-name">Rear knee staying close to the hips</span><span class="kpi-points">1 point</span></div>
+      <div class="kpi-row"><span class="kpi-name">Landing with at least parallel knees</span><span class="kpi-points">2 points</span></div>
+      <div class="kpi-row"><span class="kpi-name">Leg having minimal bend</span><span class="kpi-points">3 points</span></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <div class="sub-heading">Solutions Flowchart — Mistakes → Fixes</div>
+  <div class="section-intro" style="margin-bottom:20px;">Match what you see to the correction. Common mistakes are beginner-level. Advanced mistakes appear in experienced athletes whose technique has stalled.</div>
+
+  <div class="grid-2">
+    <div class="card" style="border-top: 3px solid var(--gold);">
+      <div class="card-title" style="color:var(--gold);">Common Mistakes</div>
+      <div class="mistake-grid" style="grid-template-columns:1fr 1fr 1fr; gap:10px;">
+        <div class="mistake-block">
+          <div class="mistake-category">Start</div>
+          <div class="mistake-item common">Kicker</div>
+          <div class="mistake-item common">Bendy Spoon</div>
+          <div class="mistake-item common">T-Rex</div>
+        </div>
+        <div class="mistake-block">
+          <div class="mistake-category">Horizontal</div>
+          <div class="mistake-item common">Flat-Footer</div>
+          <div class="mistake-item common">Crasher</div>
+          <div class="mistake-item common">Cycler</div>
+        </div>
+        <div class="mistake-block">
+          <div class="mistake-category">Vertical</div>
+          <div class="mistake-item common">Karate Champ</div>
+          <div class="mistake-item common">The Twister</div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--red);">
+      <div class="card-title" style="color:var(--red);">Advanced Mistakes</div>
+      <div class="mistake-grid" style="grid-template-columns:1fr 1fr 1fr; gap:10px;">
+        <div class="mistake-block">
+          <div class="mistake-category">Start</div>
+          <div class="mistake-item advanced">Bear</div>
+          <div class="mistake-item advanced">Skyscraper</div>
+          <div class="mistake-item advanced">Turtle</div>
+          <div class="mistake-item advanced">Bow</div>
+          <div class="mistake-item advanced">Lagger</div>
+        </div>
+        <div class="mistake-block">
+          <div class="mistake-category">Horizontal</div>
+          <div class="mistake-item advanced">Baby-Stepper</div>
+          <div class="mistake-item advanced">Rusher</div>
+        </div>
+        <div class="mistake-block">
+          <div class="mistake-category">Vertical</div>
+          <div class="mistake-item advanced">Slow-Cycler</div>
+          <div class="mistake-item advanced">Weak Pogo</div>
+          <div class="mistake-item advanced">Over-Strider</div>
+          <div class="mistake-item advanced">Weak Finisher</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-heading" style="margin-top:24px;">Corrective Exercises by Category</div>
+  <div class="grid-3">
+    <div class="card" style="border-left: 3px solid var(--columbia);">
+      <div class="card-title">Start Solutions</div>
+      <p>Start Wall Switches · Arm Swings on Command · Jump Backs · Jump Back Starts · Launches</p>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--columbia);">
+      <div class="card-title">Horizontal Solutions</div>
+      <p>Sprint Bounds 30m · Stationary Toe Drags · Three-Tape Drill · Steep Hill Sprints · Heavy / Medium / Light Sleds</p>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--columbia);">
+      <div class="card-title">Vertical Solutions</div>
+      <p>Wickets · In and Outs · Leg Hops (10 / 20 / 30m) · Intensive Tempo · Extensive Tempo · Potato Chip Runs</p>
+    </div>
+  </div>
+</div>
+
+<!-- ====================== RELAY ====================== -->
+<div class="tab-content" id="tab-relay">
+  <div class="section-label">Relays</div>
+  <div class="section-title">Relay System</div>
+  <div class="section-intro">The relay is one of the most important events for team scoring. Exchange execution wins and loses relay races — not just individual speed. Every sprinter on this team should know the relay system cold.</div>
+
+  <div class="relay-key-rule">
+    <div class="relay-key-title">The Most Important Rule</div>
+    <div class="relay-key-line"><span class="blue">CURVE = INSIDE = RIGHT HAND</span></div>
+    <div class="relay-key-line"><span class="red">STRAIGHT = OUTSIDE = LEFT HAND</span></div>
+  </div>
+
+  <div class="sub-heading">Leg Assignments</div>
+  <div class="grid-2">
+    <div class="relay-rule">
+      <div class="relay-icon">🔵</div>
+      <div>
+        <div class="relay-rule-title">1st Leg (Straight Start)</div>
+        <div class="relay-rule-body">Starts on the straight. Carries the baton on the left hand (outside). Usually your best starter — not necessarily your fastest athlete. The 1st leg sets up everything.</div>
+      </div>
+    </div>
+    <div class="relay-rule">
+      <div class="relay-icon">🔴</div>
+      <div>
+        <div class="relay-rule-title">2nd Leg (Curve Exchange)</div>
+        <div class="relay-rule-body">Receives on the straight and runs the curve. Receives left, carries right. Often your most technical athlete — must handle a curve and a blind pass.</div>
+      </div>
+    </div>
+    <div class="relay-rule">
+      <div class="relay-icon">🔵</div>
+      <div>
+        <div class="relay-rule-title">3rd Leg (Straight Exchange)</div>
+        <div class="relay-rule-body">Receives on the curve and runs the straight. Receives right, carries left. A strong straight runner. This exchange is often where races are won or lost on timing.</div>
+      </div>
+    </div>
+    <div class="relay-rule">
+      <div class="relay-icon">⭐</div>
+      <div>
+        <div class="relay-rule-title">Anchor (4th Leg — Curve Finish)</div>
+        <div class="relay-rule-body">Receives on the straight and runs the curve to the finish. Your fastest and most mentally tough athlete. The anchor carries the team home.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-heading">Practice Progression</div>
+  <div class="card">
+    <div class="card-title">Weekly Relay Practice Structure</div>
+    <p><strong style="color:var(--columbia)">Week 1–2 (Intro):</strong> General info on relay rules and strategy. Groups of 4 running 2 laps together. Walk-through handoffs. Zone jog-throughs × 6.</p>
+    <p><strong style="color:var(--columbia)">Weeks 3–5 (Development):</strong> Zone work at 50% / 75% / 90%. Focus on go mark timing and hand-off mechanics at each intensity level.</p>
+    <p><strong style="color:var(--columbia)">Weeks 6+ (Race Prep):</strong> Near-race-speed exchanges. Optional blocks. Rehearse full relay sequences. Identify A/B/JV teams.</p>
+  </div>
+
+  <div class="sub-heading">Hurdle-Specific Notes</div>
+  <div class="card">
+    <div class="card-title">Hurdle Drill Progression (Reference)</div>
+    <p><strong style="color:var(--columbia)">1-Step Drill:</strong> 6 feet spacing. Heights — Men: 30", Women: 27"</p>
+    <p><strong style="color:var(--columbia)">3-Step Drill:</strong> 16 feet spacing. Heights — Men: 30", Women: 27"</p>
+    <p><strong style="color:var(--columbia)">Gavin Step Drill:</strong> 6"–6"–6"–15"–15" pattern (5-step to 5-step progression). Heights scale from Men: 30"→39", Women: 27"→33"</p>
+    <p>Full wicket spacing by level and event is in the Hurdle/Wicket Cheat Sheet — keep a physical copy at every hurdle practice.</p>
+  </div>
+
+  <div class="sub-heading">The Hurdle Commandments</div>
+  <div class="card" style="border-left: 3px solid var(--gold);">
+    <div class="card-title" style="color:var(--gold);">5 Laws of the Hurdler</div>
+    <p>These are the cultural and technical non-negotiables for every hurdler on this team. Post them. Remind athletes of them. Hold them to it.</p>
+    <div style="margin-top:14px; display:flex; flex-direction:column; gap:10px;">
+      <div class="rule-card" style="margin-bottom:0; border-left: none; background: rgba(232,200,74,0.05); border: 1px solid rgba(232,200,74,0.2);">
+        <div class="rule-num" style="color:var(--gold); font-size:1.2rem;">I.</div>
+        <div><div class="rule-title">Thou shall not go over a backwards hurdle</div><div class="rule-body">Safety first. A backwards hurdle is a broken hurdle waiting to happen. Stop practice if needed.</div></div>
+      </div>
+      <div class="rule-card" style="margin-bottom:0; border-left: none; background: rgba(232,200,74,0.05); border: 1px solid rgba(232,200,74,0.2);">
+        <div class="rule-num" style="color:var(--gold); font-size:1.2rem;">II.</div>
+        <div><div class="rule-title">Thou shall not stutter step</div><div class="rule-body">Stutter stepping at the hurdle is fear in disguise. Attack. Drive. Commit to the stride pattern.</div></div>
+      </div>
+      <div class="rule-card" style="margin-bottom:0; border-left: none; background: rgba(232,200,74,0.05); border: 1px solid rgba(232,200,74,0.2);">
+        <div class="rule-num" style="color:var(--gold); font-size:1.2rem;">III.</div>
+        <div><div class="rule-title">Thou shall clap if a teammate falls</div><div class="rule-body">We do not laugh. We do not panic. We clap. Falling is part of hurdling. Getting back up is who we are.</div></div>
+      </div>
+      <div class="rule-card" style="margin-bottom:0; border-left: none; background: rgba(232,200,74,0.05); border: 1px solid rgba(232,200,74,0.2);">
+        <div class="rule-num" style="color:var(--gold); font-size:1.2rem;">IV.</div>
+        <div><div class="rule-title">Thou shall not coward away from a hurdle</div><div class="rule-body">Mental toughness is a skill. Every time an athlete dodges a hurdle they are training themselves to be afraid of it. Go over.</div></div>
+      </div>
+      <div class="rule-card" style="margin-bottom:0; border-left: none; background: rgba(232,200,74,0.05); border: 1px solid rgba(232,200,74,0.2);">
+        <div class="rule-num" style="color:var(--gold); font-size:1.2rem;">V.</div>
+        <div><div class="rule-title">Thou shall keep arms and legs inside the ride at all times</div><div class="rule-body">Technique. No flailing. Clean form over every barrier — arms drive forward, trail leg snaps through.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-heading">H-Crew System</div>
+  <div class="card">
+    <div class="card-title">Managing Hurdles at Meets</div>
+    <p>The H-Crew is a 10-person crew of sprinters assigned to manage hurdle stacks during hurdle races. One athlete per hurdle stack. This keeps the meet running smoothly and gives non-competing athletes a job with real responsibility.</p>
+    <p><strong style="color:var(--columbia)">Assignment Rule:</strong> Whoever is not hurdling in a given race is on H-Crew for that race. Preassign athletes before the meet — do not scramble at the track.</p>
+    <p><strong style="color:var(--columbia)">Why it works:</strong> Each hurdle race is scheduled right after a distance event, so no sprinter should have a conflict. No excuses for skipping H-Crew duty.</p>
+    <div class="workout-note" style="margin-top:12px;">H-Crew is also a culture tool. Athletes who take care of the meet are athletes who are invested in the team. It's not a punishment — it's a role. Treat it that way.</div>
+  </div>
+</div>
+
+<!-- ====================== RECOVERY & ELDOA ====================== -->
+<div class="tab-content" id="tab-recovery">
+  <div class="section-label">Section 8</div>
+  <div class="section-title">Recovery & ELDOA</div>
+  <div class="section-intro">Recovery is not optional — it's training. Athletes who recover well perform better. ELDOA is a recovery and mobility system used in this program on recovery days, after hard workouts, and as part of the active recovery rotation.</div>
+
+  <div class="card" style="margin-bottom: 24px;">
+    <div class="card-title">What is ELDOA?</div>
+    <p>ELDOA (Étirements Longitudinaux avec Decoaptation Ostéo-Articulaire) is a therapeutic movement system designed to create space in the spine and joints. Each posture targets a specific spinal segment through myofascial tension. For sprinters, ELDOA addresses lower back compression, hip flexor tightness, and joint decompression that accumulates from high-speed training.</p>
+    <p>Positions are held for 1–2 minutes each. Athletes should feel the stretch deepen progressively — it is not a passive stretch but an active, sustained hold.</p>
+  </div>
+
+  <div class="sub-heading">The 6 ELDOA Positions</div>
+  <div class="eldoa-grid">
+    <div class="eldoa-card">
+      <div class="eldoa-name">Steeple</div>
+      <div class="eldoa-desc">Seated cross-legged with arms overhead, hands interlaced. Targets upper thoracic spine and shoulder mobility. Common in warm-down and recovery sessions.</div>
+    </div>
+    <div class="eldoa-card">
+      <div class="eldoa-name">Small Globe</div>
+      <div class="eldoa-desc">Seated with feet together, knees out, arms raised overhead. Targets L5/S1 junction and hip flexors. One of the most commonly used positions in the program.</div>
+    </div>
+    <div class="eldoa-card">
+      <div class="eldoa-name">Large Globe</div>
+      <div class="eldoa-desc">Seated in a wide straddle with arms raised overhead. Targets thoracolumbar fascia and hip adductors. Good for post-sled and post-block work.</div>
+    </div>
+    <div class="eldoa-card">
+      <div class="eldoa-name">Hurdle Turn</div>
+      <div class="eldoa-desc">Kneeling lunge with trail leg back, one arm reaching overhead. Named for the hurdling position it mimics. Targets hip flexor, rotator, and lumbar spine.</div>
+    </div>
+    <div class="eldoa-card">
+      <div class="eldoa-name">Front Inline</div>
+      <div class="eldoa-desc">Kneeling with hips squared and one arm reaching forward-up while the other stays back. Targets thoracic rotation and hip extension. Key for sprinters with rotation deficits.</div>
+    </div>
+    <div class="eldoa-card">
+      <div class="eldoa-name">Todler</div>
+      <div class="eldoa-desc">Supine (on back) with legs up the wall, toes dorsiflexed, arms out to the sides. Deep lower back decompression. Best used at the end of hard training days.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <div class="sub-heading">Active Recovery Options</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Resistance Band Work</div>
+      <p>Seated Leg Raises · Lateral Band Walk · Banded Fire Hydrants · Knee Raises · Lying Lateral Raises · Seated Hip Abduction</p>
+      <p>Used on recovery days and as activation on speed day warm-ups. Light resistance, high control, full range of motion.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Alternative Workouts (No Track Access)</div>
+      <p><strong style="color:var(--columbia)">Speed Bike:</strong> 60 seconds high / 30 seconds low, repeat 15–20 min</p>
+      <p><strong style="color:var(--columbia)">Pool:</strong> 4 laps, high knees 3×30sec, squat jumps 3×10</p>
+      <p>For full indoor exercise library (stair bounds, wall switches, arm swings, launches, stationary toe drags), see the Solutions Guide in the Resources tab.</p>
+    </div>
+  </div>
+
+  <div class="sub-heading">X's — Walking Series in Sand</div>
+  <div class="card">
+    <div class="card-title">X's (Sand Walking Series)</div>
+    <p>3 reps of walking series in sand. Used as active recovery after hard workouts and on meet-week recovery days. The sand resistance forces ankle and calf activation without the impact of running. Also appears as part of the cool-down on meet days.</p>
+  </div>
+</div>
+
+<!-- ====================== HOW TO PROGRAM ====================== -->
+<div class="tab-content" id="tab-programming">
+  <div class="section-label">Section 9</div>
+  <div class="section-title">How To Program</div>
+  <div class="section-intro">This is the section that separates a coach from a babysitter. Being able to build a workout — not just follow one — is the skill Coach Lewis is trusting you to develop. Read this, think about it, then look back at the 8 weekly plans and see how they fit these principles.</div>
+
+  <div class="sub-heading">The Season Arc</div>
+  <div class="card">
+    <div class="card-title">How the Season Builds</div>
+    <p><strong style="color:var(--green)">Pre-Season (Weeks 1–4) = Endurance Phase.</strong> Volume is king. Broken ladders, hill runs, 4 corners, bodybuilding lifts. The body is being prepared to handle training. Athletes need base conditioning before you push speed.</p>
+    <p><strong style="color:var(--gold)">Season Weeks 1–3 = Transition to Strength.</strong> Volume begins to drop. Sleds, plyometrics, power lifting, relay intro. Pace targets tighten. Block work begins.</p>
+    <p><strong style="color:var(--red)">Season Weeks 4+ = Strength into Speed.</strong> 200 repeats, lactic training, zone work at race pace. Lift focus shifts to explosiveness. Start quality becomes the priority. Athletes should feel fast.</p>
+    <p><strong style="color:var(--columbia)">Post-Season = Specialization.</strong> After championships, the program shifts to individualized speed work and specialized sessions for athletes continuing into the off-season. Lower volume, higher intent. This is where you develop next year's varsity athletes.</p>
+  </div>
+
+  <div class="sub-heading">Building a Week</div>
+  <div class="card">
+    <div class="card-title">Weekly Template Logic</div>
+    <p>The standard week follows this pattern — you don't need to copy it exactly, but understand why it's structured this way:</p>
+    <p><strong style="color:var(--columbia)">Monday:</strong> Speed or Explosive. Fresh legs. High output. Full rest between reps. This is the most important practice day of the week.</p>
+    <p><strong style="color:var(--columbia)">Tuesday:</strong> Conditioning. Volume work. Broken ladders, 200 repeats, lactic. Lower intensity than Monday but physically demanding.</p>
+    <p><strong style="color:var(--columbia)">Wednesday:</strong> Off, Recovery, or Meet Prep. Allow CNS recovery before Thursday competition.</p>
+    <p><strong style="color:var(--columbia)">Thursday:</strong> Event Practice, Meet, or Technical Work. Specificity day.</p>
+    <p><strong style="color:var(--columbia)">Friday:</strong> Off, Recovery, or Light Prep.</p>
+    <p><strong style="color:var(--columbia)">Saturday:</strong> Hills (pre-season) or Invitational Meet (season).</p>
+  </div>
+
+  <div class="sub-heading">Common Programming Mistakes to Avoid</div>
+  <p class="section-intro" style="margin-bottom: 16px;">From "Smashing PRs 101" (Sprint Project) — 10 reasons athletes plateau:</p>
+  <div class="grid-2">
+    <div class="rule-card" style="border-left:none; border-top: 2px solid var(--red);">
+      <div class="rule-num" style="color:var(--red);">✗</div>
+      <div>
+        <div class="rule-title">No Periodization</div>
+        <div class="rule-body">Training without planned phases. This program is built on periodization — if you abandon the phase structure, athletes will plateau.</div>
+      </div>
+    </div>
+    <div class="rule-card" style="border-left:none; border-top: 2px solid var(--red);">
+      <div class="rule-num" style="color:var(--red);">✗</div>
+      <div>
+        <div class="rule-title">Training the 100 by Running 100s</div>
+        <div class="rule-body">We do not run full 100s to improve at the 100. We target specific zones — 0-30m, 30-60m, 60m+ — with dedicated drills and pacing.</div>
+      </div>
+    </div>
+    <div class="rule-card" style="border-left:none; border-top: 2px solid var(--red);">
+      <div class="rule-num" style="color:var(--red);">✗</div>
+      <div>
+        <div class="rule-title">Skipping the Weight Room</div>
+        <div class="rule-body">Lifting directly improves sprint force output. It also prevents injury. The weight room is not optional for this program.</div>
+      </div>
+    </div>
+    <div class="rule-card" style="border-left:none; border-top: 2px solid var(--red);">
+      <div class="rule-num" style="color:var(--red);">✗</div>
+      <div>
+        <div class="rule-title">Too Much Volume</div>
+        <div class="rule-body">More is not better. 2–3 hard sprint sessions per week maximum. Quality degrades fast with overtraining and injury risk spikes.</div>
+      </div>
+    </div>
+    <div class="rule-card" style="border-left:none; border-top: 2px solid var(--red);">
+      <div class="rule-num" style="color:var(--red);">✗</div>
+      <div>
+        <div class="rule-title">Same Thing Every Week</div>
+        <div class="rule-body">Athletes need new stimuli to keep adapting. Rotate workout variables (distance, rest, intensity) across weeks. Use the ladder progression as the model.</div>
+      </div>
+    </div>
+    <div class="rule-card" style="border-left:none; border-top: 2px solid var(--red);">
+      <div class="rule-num" style="color:var(--red);">✗</div>
+      <div>
+        <div class="rule-title">Tracking Zero Metrics</div>
+        <div class="rule-body">Keep time records. Track 30m acceleration and 30m fly splits. Without data, you can't tell what's working. Use meet results AND practice timing.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====================== RESOURCES ====================== -->
+<div class="tab-content" id="tab-resources">
+  <div class="section-label">Section 10</div>
+  <div class="section-title">Resources</div>
+  <div class="section-intro">These are the sources Coach Lewis pulls from. Study them. They are not just references — they are the foundation of this program's approach to sprint coaching.</div>
+
+  <div class="resource-card">
+    <div class="resource-icon">🌐</div>
+    <div>
+      <div class="resource-title">Altis World</div>
+      <div class="resource-source">Primary Foundation · altis.world</div>
+      <div class="resource-body">The world-class track and field performance center that forms the base of this program. Altis trains elite sprinters and publishes extensive free content on sprint development, coaching methodology, and periodization. If you want to go deeper on the why behind anything in this program, Altis is where you look.</div>
+      <a class="resource-link" href="https://altis.world" target="_blank">altis.world →</a>
+    </div>
+  </div>
+
+  <div class="resource-card">
+    <div class="resource-icon">🎯</div>
+    <div>
+      <div class="resource-title">The Sprint Project — Sprint Cheat Codes</div>
+      <div class="resource-source">Technique Diagnosis · The Sprint Project ©</div>
+      <div class="resource-body">This is the system behind the technique diagnostic tools in this packet — the Flowchart, the Start/Horizontal/Vertical Checklists, the Solutions Guide, and the 5 Golden Rules. Use their framework to identify athlete weaknesses and prescribe targeted corrective exercises. The full indoor exercise library is also available in the Solutions Guide PDF.</div>
+    </div>
+  </div>
+
+  <div class="resource-card">
+    <div class="resource-icon">📋</div>
+    <div>
+      <div class="resource-title">RHS Practice Card</div>
+      <div class="resource-source">Coach Lewis · Ramona High School</div>
+      <div class="resource-body">The master one-page reference for all warm-up options, hurdle drills, explosive series, general strength circuits, core work, lifting menus, and recovery protocols. Keep a physical copy at every practice. This card is the menu — the weekly plans tell you what to order.</div>
+    </div>
+  </div>
+
+  <div class="resource-card">
+    <div class="resource-icon">📐</div>
+    <div>
+      <div class="resource-title">Hurdle/Wicket Cheat Sheet</div>
+      <div class="resource-source">Coach Lewis · Ramona High School</div>
+      <div class="resource-body">Full reference for hurdle heights and distances for every race (60m through 400m), wicket spacing by athlete level (Beginner/Intermediate/Advanced), 1-step/3-step/Gavin drill spacings, 300H stride pattern goals, and takeoff/touchdown adjustment tables. Keep a physical copy in your coaching bag for every hurdle practice and meet.</div>
+    </div>
+  </div>
+
+  <div class="resource-card">
+    <div class="resource-icon">🔄</div>
+    <div>
+      <div class="resource-title">ELDOA System</div>
+      <div class="resource-source">Recovery Methodology</div>
+      <div class="resource-body">Therapeutic movement system for joint decompression, spinal health, and myofascial release. The 6 positions used in this program are documented in the Recovery tab. ELDOA is used post-practice and on recovery days. See the ELDOA cheat sheet for visual reference of all positions.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <div class="sub-heading">Head Coach Responsibilities</div>
+  <div class="card">
+    <div class="card-title">What Running This Program Means</div>
+    <p>Being head coach isn't just about practice. Here's the full scope of what this role requires — so nothing falls through the cracks while Coach Lewis is away.</p>
+    <div class="grid-2" style="margin-top:14px;">
+      <div>
+        <p style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--columbia);margin-bottom:10px;font-weight:700;">Athlete Management</p>
+        <ul class="drill-list" style="grid-template-columns:1fr;">
+          <li>Attendance tracking</li>
+          <li>Lettering points</li>
+          <li>Rosters (active, cuts, physicals)</li>
+          <li>Parent-coach communications</li>
+        </ul>
+      </div>
+      <div>
+        <p style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--columbia);margin-bottom:10px;font-weight:700;">Meet Operations</p>
+        <ul class="drill-list" style="grid-template-columns:1fr;">
+          <li>Timers (Red Hats)</li>
+          <li>Bus coordination</li>
+          <li>Meet workers (home meets)</li>
+          <li>Snack bar operations</li>
+        </ul>
+      </div>
+      <div>
+        <p style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--columbia);margin-bottom:10px;font-weight:700;">Program Administration</p>
+        <ul class="drill-list" style="grid-template-columns:1fr;">
+          <li>Track funds / Track Bank</li>
+          <li>Fundraisers</li>
+          <li>Coaching office</li>
+          <li>Inventory and equipment</li>
+        </ul>
+      </div>
+      <div>
+        <p style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--columbia);margin-bottom:10px;font-weight:700;">Staff & Culture</p>
+        <ul class="drill-list" style="grid-template-columns:1fr;">
+          <li>Staff coordination</li>
+          <li>Unified Champions Club</li>
+          <li>Program traditions</li>
+          <li>Season planning</li>
+        </ul>
+      </div>
+    </div>
+    <div class="workout-note" style="margin-top:16px;">When in doubt about any of these areas, reference the Ramona Head Coach HQ tool — it was built to track all of this. Ask Coach Lewis before the Army deployment for login access and open items.</div>
+  </div>
+
+  <hr class="divider">
+  <div class="sub-heading">Key Reference Documents (Physical Copies)</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Keep These at Every Practice</div>
+      <p>RHS Practice Card · Hurdle/Wicket Cheat Sheet · 4×100 Relay Sheet · ELDOA Cheat Sheet</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Study These in the Off-Season</div>
+      <p>Altis World — free articles and podcasts · The Sprint Project — checklists, flowchart, solutions guide, Smashing PRs 101, 5 Golden Rules</p>
+    </div>
+  </div>
+
+  <div class="army-banner" style="margin-top: 32px;">
+    <div class="army-icon">🎖️</div>
+    <div class="army-text">
+      <strong>Final message from Coach Lewis:</strong> This packet is everything I know about running this program. It's not perfect and it's not the last word on sprint coaching. But it's what I've built and what I believe in. You now have everything you need to run it while I'm away. Trust the phases, trust the plan, trust your athletes. And when you don't know — look it up. A good coach never stops learning. RAM PRIDE 🐏
+    </div>
+  </div>
+</div>
+
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+function switchTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function toggleWorkout(header) {
+  const item = header.parentElement;
+  item.classList.toggle('open');
+}
+
+function filterWorkouts(phase, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.workout-item').forEach(item => {
+    if (phase === 'all' || item.dataset.phase === phase) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+function filterWorkouts2(phase, btn) {
+  const parent = btn.closest('.tab-content');
+  parent.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  parent.querySelectorAll('.workout-item[data-phase2]').forEach(item => {
+    if (phase === 'all' || item.dataset.phase2 === phase) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('scrollTop');
+  btn.classList.toggle('visible', window.scrollY > 400);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ramona T&F — Head Coach HQ</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #122040;
+    --navy-light: #1a3060;
+    --columbia: #4a90d9;
+    --columbia-light: #6aaee8;
+    --columbia-pale: #c8e0f5;
+    --white: #f4f7fb;
+    --black: #080d14;
+    --gray: #8a9bb5;
+    --gray-light: #c2cede;
+    --accent: #4a90d9;
+    --danger: #e05252;
+    --success: #3db87a;
+    --warn: #e0a832;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--navy);
+    border-bottom: 2px solid var(--columbia);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-badge {
+    width: 40px;
+    height: 40px;
+    background: var(--columbia);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--navy);
+    font-weight: 400;
+    letter-spacing: 1px;
+  }
+
+  .logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+
+  .logo-text span:first-child {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: var(--white);
+  }
+
+  .logo-text span:last-child {
+    font-size: 10px;
+    color: var(--columbia);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .motto-pill {
+    background: var(--navy-mid);
+    border: 1px solid var(--navy-light);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 11px;
+    color: var(--columbia-light);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  /* LAYOUT */
+  .app {
+    display: flex;
+    flex: 1;
+    height: calc(100vh - 64px);
+    overflow: hidden;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 220px;
+    min-width: 220px;
+    background: var(--navy);
+    border-right: 1px solid var(--navy-light);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: 16px 0;
+  }
+
+  .sidebar-section {
+    margin-bottom: 8px;
+  }
+
+  .sidebar-label {
+    font-size: 9px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--gray);
+    padding: 8px 20px 4px;
+    font-weight: 600;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+    font-size: 13.5px;
+    color: var(--gray-light);
+    font-weight: 400;
+  }
+
+  .nav-item:hover {
+    background: var(--navy-mid);
+    color: var(--white);
+    border-left-color: var(--navy-light);
+  }
+
+  .nav-item.active {
+    background: var(--navy-mid);
+    color: var(--columbia-light);
+    border-left-color: var(--columbia);
+    font-weight: 600;
+  }
+
+  .nav-item .icon {
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  /* MAIN CONTENT */
+  .main {
+    flex: 1;
+    overflow-y: auto;
+    background: #0d1520;
+    padding: 28px 32px;
+  }
+
+  /* PANEL */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .panel-header {
+    margin-bottom: 24px;
+  }
+
+  .panel-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 2px;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .panel-sub {
+    font-size: 13px;
+    color: var(--gray);
+    margin-top: 4px;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--navy);
+    border: 1px solid var(--navy-light);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  .card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 1.5px;
+    color: var(--columbia-light);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-title .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--columbia);
+    flex-shrink: 0;
+  }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+  /* STAT PILLS */
+  .stat-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .stat {
+    background: var(--navy-mid);
+    border: 1px solid var(--navy-light);
+    border-radius: 8px;
+    padding: 10px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .stat-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    color: var(--columbia-light);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    color: var(--gray);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  /* TODO LIST */
+  .todo-input-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .todo-input-row input {
+    flex: 1;
+    background: var(--navy-mid);
+    border: 1px solid var(--navy-light);
+    border-radius: 8px;
+    padding: 9px 14px;
+    font-size: 13px;
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .todo-input-row input:focus { border-color: var(--columbia); }
+  .todo-input-row input::placeholder { color: var(--gray); }
+
+  .todo-input-row select {
+    background: var(--navy-mid);
+    border: 1px solid var(--navy-light);
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-size: 12px;
+    color: var(--gray-light);
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .btn {
+    background: var(--columbia);
+    color: var(--navy);
+    border: none;
+    border-radius: 8px;
+    padding: 9px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-family: 'DM Sans', sans-serif;
+    white-space: nowrap;
+  }
+
+  .btn:hover { background: var(--columbia-light); }
+
+  .btn-sm {
+    padding: 5px 10px;
+    font-size: 11px;
+    border-radius: 6px;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--gray);
+    border: 1px solid var(--navy-light);
+  }
+
+  .btn-ghost:hover { background: var(--navy-mid); color: var(--white); }
+
+  .btn-danger {
+    background: transparent;
+    color: var(--danger);
+    border: 1px solid transparent;
+  }
+
+  .btn-danger:hover { background: rgba(224,82,82,0.1); }
+
+  /* TODO ITEM */
+  .todo-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: var(--navy-mid);
+    margin-bottom: 6px;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+  }
+
+  .todo-item:hover { border-left-color: var(--columbia); }
+
+  .todo-item.done { opacity: 0.45; }
+  .todo-item.done .todo-text { text-decoration: line-through; color: var(--gray); }
+
+  .todo-item input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--columbia);
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .todo-text { flex: 1; font-size: 13.5px; line-height: 1.4; }
+
+  .priority-badge {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+  }
+
+  .p-urgent { background: rgba(224,82,82,0.2); color: #f08080; }
+  .p-high { background: rgba(224,168,50,0.2); color: #e0c060; }
+  .p-normal { background: rgba(74,144,217,0.2); color: var(--columbia-light); }
+  .p-low { background: rgba(61,184,122,0.15); color: #60d090; }
+
+  /* CHECKLIST */
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 13.5px;
+    cursor: pointer;
+  }
+
+  .check-item:last-child { border-bottom: none; }
+
+  .check-item input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--columbia);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .check-item.checked span { text-decoration: line-through; color: var(--gray); }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  th {
+    text-align: left;
+    padding: 8px 12px;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gray);
+    border-bottom: 1px solid var(--navy-light);
+    font-weight: 600;
+  }
+
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: var(--gray-light);
+    vertical-align: top;
+  }
+
+  tr:hover td { background: rgba(74,144,217,0.04); }
+
+  td.highlight { color: var(--white); font-weight: 500; }
+
+  /* COACH TAGS */
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(74,144,217,0.15);
+    color: var(--columbia-light);
+    border: 1px solid rgba(74,144,217,0.3);
+    font-weight: 500;
+  }
+
+  .tag-navy {
+    background: rgba(26,48,96,0.6);
+    color: var(--columbia-pale);
+    border-color: var(--navy-light);
+  }
+
+  /* NOTES / TEXTAREA */
+  .note-area {
+    width: 100%;
+    background: var(--navy-mid);
+    border: 1px solid var(--navy-light);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 13px;
+    color: var(--white);
+    font-family: 'DM Mono', monospace;
+    resize: vertical;
+    min-height: 100px;
+    outline: none;
+    line-height: 1.6;
+    transition: border-color 0.15s;
+  }
+
+  .note-area:focus { border-color: var(--columbia); }
+  .note-area::placeholder { color: var(--gray); }
+
+  /* DIVIDER */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--navy-light);
+    margin: 20px 0;
+  }
+
+  /* INFO ROWS */
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 13px;
+  }
+
+  .info-row:last-child { border-bottom: none; }
+  .info-key { color: var(--gray); }
+  .info-val { color: var(--white); font-weight: 500; text-align: right; }
+
+  /* UPCOMING MEET BANNER */
+  .meet-banner {
+    background: linear-gradient(135deg, var(--navy-mid) 0%, var(--navy-light) 100%);
+    border: 1px solid var(--columbia);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .meet-banner-info { flex: 1; }
+  .meet-banner-date {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: var(--columbia-light);
+    margin-bottom: 2px;
+  }
+
+  .meet-banner-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--white);
+  }
+
+  .meet-banner-meta {
+    font-size: 12px;
+    color: var(--gray);
+    margin-top: 3px;
+  }
+
+  .meet-type {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  .away { background: rgba(224,168,50,0.2); color: #e0c060; border: 1px solid rgba(224,168,50,0.3); }
+  .home { background: rgba(61,184,122,0.15); color: #60d090; border: 1px solid rgba(61,184,122,0.2); }
+  .invitational { background: rgba(74,144,217,0.2); color: var(--columbia-light); border: 1px solid rgba(74,144,217,0.3); }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: var(--gray);
+    text-transform: uppercase;
+    margin: 20px 0 10px;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--navy-light); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--columbia); }
+
+  /* INVENTORY */
+  .inv-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 13px;
+  }
+
+  .inv-row:last-child { border-bottom: none; }
+  .inv-name { color: var(--white); }
+  .inv-qty {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--columbia-light);
+    font-weight: 500;
+    min-width: 40px;
+    text-align: right;
+  }
+
+  /* FINANCIALS */
+  .fin-balance {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: var(--columbia-light);
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+
+  .fin-label { font-size: 12px; color: var(--gray); margin-top: 4px; }
+
+  /* EMPTY STATE */
+  .empty {
+    text-align: center;
+    padding: 32px;
+    color: var(--gray);
+    font-size: 13px;
+  }
+
+  .empty-icon { font-size: 32px; margin-bottom: 8px; }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    .sidebar { width: 60px; min-width: 60px; }
+    .nav-item span:last-child { display: none; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .main { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-badge">R</div>
+    <div class="logo-text">
+      <span>Ramona Track & Field</span>
+      <span>Head Coach HQ · 2025–26</span>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="motto-pill">Be Better Than Yesterday</div>
+  </div>
+</header>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Overview</div>
+      <div class="nav-item active" onclick="showPanel('home')">
+        <span class="icon">🏠</span><span>Home</span>
+      </div>
+      <div class="nav-item" onclick="showPanel('todos')">
+        <span class="icon">✅</span><span>To-Dos & Notes</span>
+      </div>
+      <div class="nav-item" onclick="showPanel('wishlist')">
+        <span class="icon">⭐</span><span>Wish List</span>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Operations</div>
+      <div class="nav-item" onclick="showPanel('checklists')">
+        <span class="icon">📋</span><span>Checklists</span>
+      </div>
+      <div class="nav-item" onclick="showPanel('schedule')">
+        <span class="icon">📅</span><span>Schedule</span>
+      </div>
+      <div class="nav-item" onclick="showPanel('meetplanning')">
+        <span class="icon">🏟️</span><span>Meet Planning</span>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Team</div>
+      <div class="nav-item" onclick="showPanel('inventory')">
+        <span class="icon">📦</span><span>Inventory</span>
+      </div>
+      <div class="nav-item" onclick="showPanel('financials')">
+        <span class="icon">💰</span><span>Financials</span>
+      </div>
+      <div class="nav-item" onclick="showPanel('meetings')">
+        <span class="icon">🗣️</span><span>Meetings</span>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Culture</div>
+      <div class="nav-item" onclick="showPanel('rules')">
+        <span class="icon">📜</span><span>Rules & Expectations</span>
+      </div>
+      <div class="nav-item" onclick="showPanel('traditions')">
+        <span class="icon">🏆</span><span>Traditions</span>
+      </div>
+      <div class="nav-item" onclick="showPanel('clubs')">
+        <span class="icon">🤝</span><span>Clubs</span>
+      </div>
+      <div class="nav-item" onclick="showPanel('beachday')">
+        <span class="icon">🏖️</span><span>Beach Day</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- HOME -->
+    <div class="panel active" id="panel-home">
+      <div class="panel-header">
+        <div class="panel-title">Home Base</div>
+        <div class="panel-sub">Ramona High School · River Valley League · Division 2</div>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat"><div class="stat-val">2</div><div class="stat-label">Head Coaches</div></div>
+        <div class="stat"><div class="stat-val">7</div><div class="stat-label">Asst Coaches</div></div>
+        <div class="stat"><div class="stat-val">200+</div><div class="stat-label">Athletes</div></div>
+        <div class="stat"><div class="stat-val">6</div><div class="stat-label">League Teams</div></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><div class="dot"></div>Coaching Staff</div>
+          <div class="info-row"><span class="info-key">Men's Head</span><span class="info-val">Zachary Lewis<br><small style="color:var(--gray);font-weight:400">Sprints, Hurdles, Relays</small></span></div>
+          <div class="info-row"><span class="info-key">Women's Head</span><span class="info-val">Edgar Cobian<br><small style="color:var(--gray);font-weight:400">Distance</small></span></div>
+          <div class="info-row"><span class="info-key">Throws</span><span class="info-val">Brian Haring, Hector Higuera</span></div>
+          <div class="info-row"><span class="info-key">Jumps</span><span class="info-val">Kecia Lynch, Lauren DeFrank</span></div>
+          <div class="info-row"><span class="info-key">Pole Vault</span><span class="info-val">Scott Hanes</span></div>
+          <div class="info-row"><span class="info-key">Distance</span><span class="info-val">Nayeli Gastelum</span></div>
+          <div class="info-row"><span class="info-key">Sprints/Hurdles</span><span class="info-val">Lauren DeFrank</span></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><div class="dot"></div>Team Info</div>
+          <div class="info-row"><span class="info-key">League</span><span class="info-val">River Valley League</span></div>
+          <div class="info-row"><span class="info-key">Division</span><span class="info-val">2</span></div>
+          <div class="info-row"><span class="info-key">Colors</span><span class="info-val">Navy, Columbia Blue, Black, White</span></div>
+          <div class="info-row"><span class="info-key">Motto</span><span class="info-val">"Be Better Than Yesterday"</span></div>
+          <div class="info-row"><span class="info-key">TNF Club Advisor</span><span class="info-val">Edgar Cobian</span></div>
+          <div class="info-row"><span class="info-key">Unified Club Advisor</span><span class="info-val">Zachary Lewis</span></div>
+        </div>
+      </div>
+
+      <div class="section-title">Upcoming Meets</div>
+
+      <div class="meet-banner">
+        <div class="meet-banner-info">
+          <div class="meet-banner-date">Thu · Mar 19, 2026</div>
+          <div class="meet-banner-name">Norte Vista Dual Meet</div>
+          <div class="meet-banner-meta">Norte Vista HS · Riverside · Depart 1:15pm · Return ~8:00pm</div>
+        </div>
+        <div class="meet-type away">Away</div>
+      </div>
+
+      <div class="meet-banner">
+        <div class="meet-banner-info">
+          <div class="meet-banner-date">Sat · Mar 21, 2026</div>
+          <div class="meet-banner-name">King Frosh / Soph</div>
+          <div class="meet-banner-meta">MLK HS · Riverside · Bus Required · Food Stop</div>
+        </div>
+        <div class="meet-type away">Away</div>
+      </div>
+
+      <div class="card" style="margin-top:8px;">
+        <div class="card-title"><div class="dot"></div>Quick Notes</div>
+        <textarea class="note-area" placeholder="Jot something down fast..." rows="3"></textarea>
+      </div>
+    </div>
+
+    <!-- TO-DOS -->
+    <div class="panel" id="panel-todos">
+      <div class="panel-header">
+        <div class="panel-title">To-Dos & Notes</div>
+        <div class="panel-sub">Track everything you need to get done</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><div class="dot"></div>Add New Task</div>
+        <div class="todo-input-row">
+          <input type="text" id="todo-input" placeholder="What needs to get done?" onkeydown="if(event.key==='Enter')addTodo()">
+          <select id="todo-priority">
+            <option value="urgent">🔴 Urgent</option>
+            <option value="high">🟡 High</option>
+            <option value="normal" selected>🔵 Normal</option>
+            <option value="low">🟢 Low</option>
+          </select>
+          <select id="todo-category">
+            <option value="Roster">Roster</option>
+            <option value="Meet Logistics">Meet Logistics</option>
+            <option value="Snack Bar">Snack Bar</option>
+            <option value="Schedule">Schedule</option>
+            <option value="Uniforms">Uniforms</option>
+            <option value="Timers/Officials">Timers/Officials</option>
+            <option value="Financials">Financials</option>
+            <option value="Admin">Admin</option>
+            <option value="Other">Other</option>
+          </select>
+          <button class="btn" onclick="addTodo()">+ Add</button>
+        </div>
+      </div>
+
+      <div id="todo-list"></div>
+
+      <div class="card" style="margin-top:8px;">
+        <div class="card-title"><div class="dot"></div>Notes / Brain Dump</div>
+        <textarea class="note-area" rows="6" id="main-notes">GENERAL NOTES:
+- Write a program that records all coaching notes, workouts, and data → segment into athlete packets + knowledge transfer tool
+- STUDY MORE AND BUILD A PLAN FOR SHIN SPLINTS → Re-buy Gua Sha and lube
+- Review Caesar Speed Notes (already purchased) → download as much info as possible
+- Filter through track data: hurdle videos (steps + form), sprint form videos
+- Integrate better shin splint prep in pre-season next year
+- Throw circuits into conditioning mix next pre-season
+
+PRINT-OUTS NEEDED:
+- Caesar Speed cheat sheet
+- Hurdle spacing cheat sheet (already have file)
+
+COACHING CARD REDESIGN:
+- 5x8, double-sided
+- Play with idea of MULTIPLE cards: Race Plan / Hurdle Spacing / Wicket Drill / Practice Card
+
+WEIGHT TRAINING PLAN:
+- Needs to be power/speed-based, centered around Olympic lifts
+- Switch to front squats
+- Integrate plyos: medicine ball workouts
+- Rubber bands!
+
+STATIC STRETCH ROUTINE (Standing):
+- Legs straight & apart, side to side
+- Legs straight, crossed
+- Right over left, left over right
+- Flamingos
+
+STATIC STRETCH ROUTINE (Sitting):
+- Butterflies
+- Hurdle stretches (one leg out)
+- Both legs out
+- Hollywood
+- Figure fours
+- Calf stretches</textarea>
+      </div>
+
+      <div class="card" style="margin-top:8px;">
+        <div class="card-title"><div class="dot"></div>General To-Do List</div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Finish coaching handbook (ask Coach Tibbles or Cobian)</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Make bronze cast models (one per event) for coaches award</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Print cheat sheets — Caesar Speed notes + hurdle spacing</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Post Athletic Clearance sheet</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Order coaching shirts ("Staff" / "Security" style)</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Redesign coaching card (5x8, double-sided — multiple card idea)</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Make Rams Land vs Sea rules + flyer (events: 100, 200, 4x50, 4x100)</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Make Valentine's Relay-tionship Challenge event</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Plan Hurdle Clinic</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Plan Spring Break Beach Party</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Organize weight training — power/speed, Olympic lifts, front squats, plyos</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Get a proper Pre / Season / Post-season training plan locked in</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Study shin splints — build prevention plan, re-buy Gua Sha + lube</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Review Caesar Speed notes — extract and apply</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Filter through hurdle + sprint form videos</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Buy rubber resistance bands</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Promote better routine + hustle — plan training blocks, train discipline, instill urgency</span></div>
+      </div>
+    </div>
+
+    <!-- WISH LIST -->
+    <div class="panel" id="panel-wishlist">
+      <div class="panel-header">
+        <div class="panel-title">Wish List</div>
+        <div class="panel-sub">Equipment, events, facility upgrades, and goals</div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><div class="dot"></div>Equipment / Items</div>
+          <div id="wish-items">
+            <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Spirit Pack under $200 (polo, warm-ups, backpack, comp shoes)</span></div>
+            <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>JugUp 3/16 spikes</span></div>
+            <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Travel van</span></div>
+            <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Med balls</span></div>
+            <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Resistance bands (thick + stationary)</span></div>
+            <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Captain patches</span></div>
+            <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Gorilla racks (for pit bag rack)</span></div>
+            <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Rechargeable magnetic lights (track bin)</span></div>
+            <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Record Board (up by January)</span></div>
+          </div>
+          <div style="margin-top:10px;" class="todo-input-row">
+            <input type="text" id="wish-item-input" placeholder="Add item...">
+            <button class="btn btn-sm" onclick="addWishItem()">+ Add</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><div class="dot"></div>Events to Host / Plan</div>
+          <div id="wish-events">
+            <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Valentine's Relay-tionship Challenge</span></div>
+            <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Beach Bonding Day</span></div>
+            <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Land vs Sea Event</span></div>
+            <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Hurdle Clinic</span></div>
+            <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Fleet Feet Shoe Fittings & Sales</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><div class="dot"></div>Facility / Organization Plans</div>
+        <div class="grid-2">
+          <div>
+            <div class="section-title" style="margin-top:0">Track Office</div>
+            <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Organize tools, jugs, training equipment</span></div>
+            <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>First aid restock</span></div>
+            <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Walkies check / charge</span></div>
+            <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Spare shoes sorted</span></div>
+            <div class="section-title">The Pit</div>
+            <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Remove cheer boxes</span></div>
+            <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Sweep floors</span></div>
+            <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Athlete bag rack setup</span></div>
+          </div>
+          <div>
+            <div class="section-title" style="margin-top:0">JV Locker Room</div>
+            <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Clean bathroom</span></div>
+            <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Allow students to use for changing</span></div>
+            <div class="section-title">Track Bin</div>
+            <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Clear it out completely</span></div>
+            <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Reorganize contents</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHECKLISTS -->
+    <div class="panel" id="panel-checklists">
+      <div class="panel-header">
+        <div class="panel-title">Checklists</div>
+        <div class="panel-sub">Home meets, away meets, and lock-up procedures</div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><div class="dot"></div>Home Meet Day</div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Snack bar stocked & staffed</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Press box set up</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Restrooms checked / unlocked</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Water jugs (3)</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>EZ Ups (2) set up</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>EZ Up walls (3)</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Tarps (2)</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Trash cans out</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Rollers ready</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Announce event order to team</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Coaches assigned to stations</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Captains briefed on duties</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Timers confirmed & paid</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Red Hats confirmed</span></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><div class="dot"></div>Away Meet Day</div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Bus list finalized & printed</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Excuse list submitted to school</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Water jugs (3) loaded</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Paper cups packed</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>EZ Ups (2) loaded</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>EZ Up walls (3)</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>First aid kit</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Tarps (2)</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Trash cans packed</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Rollers</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Throwing implements loaded</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Pole vault poles loaded</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Batons packed</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Athletes in Ramona gear for bus</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Athletes in running shoes for bus</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><div class="dot"></div>Lock-Up Procedure</div>
+        <textarea class="note-area" placeholder="Add your lock-up steps here..." rows="4"></textarea>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><div class="dot"></div>Pre-Meet (Away) — Office Tasks</div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Entries submitted by Friday before meet</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Bus request submitted</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Class excuse list submitted</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Travel waivers collected for all athletes</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Physicals verified for traveling athletes</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Weekly coach email sent (Sunday)</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Weekly athlete post on Google Classroom</span></div>
+      </div>
+    </div>
+
+    <!-- SCHEDULE -->
+    <div class="panel" id="panel-schedule">
+      <div class="panel-header">
+        <div class="panel-title">Meet Schedule</div>
+        <div class="panel-sub">2025–26 Season · Ramona Track & Field</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><div class="dot"></div>Full Season Schedule</div>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Meet</th>
+              <th>Location</th>
+              <th>City</th>
+              <th>Depart</th>
+              <th>Return</th>
+              <th>Bus</th>
+              <th>Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>—</td><td class="highlight">12/13/25</td><td class="highlight">Riverside Hurdle Clinic</td><td>Ramona HS</td><td>Riverside</td><td>—</td><td>—</td><td>No</td><td><span class="tag">Clinic</span></td></tr>
+            <tr><td>—</td><td class="highlight">1/30/26</td><td class="highlight">Riverside Winter All Comers</td><td>Ramona HS</td><td>Riverside</td><td>—</td><td>—</td><td>No</td><td><span class="tag">Preseason</span></td></tr>
+            <tr><td>1</td><td class="highlight">2/7/26</td><td class="highlight">MLK Time Trials</td><td>MLK HS</td><td>Riverside</td><td>7:15am</td><td>~Noon</td><td>Yes</td><td><span class="tag away" style="background:rgba(224,168,50,0.2);color:#e0c060;border:1px solid rgba(224,168,50,0.3)">Away</span></td></tr>
+            <tr><td>2</td><td class="highlight">2/12/26</td><td class="highlight">Blue vs White Intrasquad</td><td>Ramona HS</td><td>Riverside</td><td>—</td><td>—</td><td>No</td><td><span class="tag home" style="background:rgba(61,184,122,0.15);color:#60d090;border:1px solid rgba(61,184,122,0.2)">Home</span></td></tr>
+            <tr><td>3</td><td class="highlight">3/6/26</td><td class="highlight">Palomino Relays</td><td>Valley View HS</td><td>Moreno Valley</td><td>10:30am</td><td>8:00pm</td><td>Yes</td><td><span class="tag away" style="background:rgba(224,168,50,0.2);color:#e0c060;border:1px solid rgba(224,168,50,0.3)">Away</span></td></tr>
+            <tr><td>4</td><td class="highlight">2/26/26</td><td class="highlight">Valley View + VDL Friendly</td><td>Ramona HS</td><td>Riverside</td><td>—</td><td>—</td><td>No</td><td><span class="tag home" style="background:rgba(61,184,122,0.15);color:#60d090;border:1px solid rgba(61,184,122,0.2)">Home</span></td></tr>
+            <tr><td>5</td><td class="highlight">3/9/26</td><td class="highlight">Arlington Friendly</td><td>Arlington HS</td><td>Riverside</td><td>2:00pm</td><td>8:45pm</td><td>Yes</td><td><span class="tag away" style="background:rgba(224,168,50,0.2);color:#e0c060;border:1px solid rgba(224,168,50,0.3)">Away</span></td></tr>
+            <tr><td>6</td><td class="highlight">3/12/26</td><td class="highlight">La Sierra Dual Meet</td><td>Ramona HS</td><td>Riverside</td><td>2:00pm</td><td>8:45pm</td><td>No</td><td><span class="tag home" style="background:rgba(61,184,122,0.15);color:#60d090;border:1px solid rgba(61,184,122,0.2)">Home</span></td></tr>
+            <tr><td>7a</td><td class="highlight">3/13/26</td><td class="highlight">Spartan Distance & PV Carnival</td><td>Rio Mesa HS</td><td>Oxnard</td><td>10:55am</td><td>Midnight</td><td>Yes</td><td><span class="tag away" style="background:rgba(224,168,50,0.2);color:#e0c060;border:1px solid rgba(224,168,50,0.3)">Away</span></td></tr>
+            <tr><td>7b</td><td class="highlight">3/14/26</td><td class="highlight">Spartan Relays</td><td>Rio Mesa HS</td><td>Oxnard</td><td>5:30am</td><td>7:00pm</td><td>Yes</td><td><span class="tag away" style="background:rgba(224,168,50,0.2);color:#e0c060;border:1px solid rgba(224,168,50,0.3)">Away</span></td></tr>
+            <tr><td>8</td><td class="highlight">3/19/26</td><td class="highlight">Norte Vista Dual Meet</td><td>Norte Vista HS</td><td>Riverside</td><td>1:15pm</td><td>8:00pm</td><td>Yes</td><td><span class="tag away" style="background:rgba(224,168,50,0.2);color:#e0c060;border:1px solid rgba(224,168,50,0.3)">Away</span></td></tr>
+            <tr><td>9</td><td class="highlight">3/21/26</td><td class="highlight">King Frosh / Soph</td><td>MLK HS</td><td>Riverside</td><td>TBD</td><td>TBD</td><td>Yes</td><td><span class="tag away" style="background:rgba(224,168,50,0.2);color:#e0c060;border:1px solid rgba(224,168,50,0.3)">Away</span></td></tr>
+            <tr><td>10</td><td class="highlight">4/4/26</td><td class="highlight">Raincross Tradition</td><td>MLK HS</td><td>Riverside</td><td>6:00am</td><td>3:00pm</td><td>Yes</td><td><span class="tag away" style="background:rgba(224,168,50,0.2);color:#e0c060;border:1px solid rgba(224,168,50,0.3)">Away</span></td></tr>
+            <tr><td>11</td><td class="highlight">4/9/26</td><td class="highlight">Jurupa Valley Dual Meet</td><td>Ramona HS</td><td>Riverside</td><td>—</td><td>—</td><td>No</td><td><span class="tag home" style="background:rgba(61,184,122,0.15);color:#60d090;border:1px solid rgba(61,184,122,0.2)">Home</span></td></tr>
+            <tr><td>*</td><td class="highlight">4/10–11/26</td><td class="highlight">Arcadia Invitational</td><td>Arcadia HS</td><td>Arcadia</td><td>TBD</td><td>TBD</td><td>Yes</td><td><span class="tag invitational" style="background:rgba(74,144,217,0.2);color:#6aaee8;border:1px solid rgba(74,144,217,0.3)">Invite</span></td></tr>
+            <tr><td>12</td><td class="highlight">4/11/26</td><td class="highlight">Big Meet</td><td>Valley View HS</td><td>Moreno Valley</td><td>6:00am</td><td>6:00pm</td><td>Yes</td><td><span class="tag away" style="background:rgba(224,168,50,0.2);color:#e0c060;border:1px solid rgba(224,168,50,0.3)">Away</span></td></tr>
+            <tr><td>13</td><td class="highlight">4/16/26</td><td class="highlight">Rubidoux Dual Meet</td><td>Rubidoux HS</td><td>Jurupa Valley</td><td>1:15pm</td><td>8:00pm</td><td>Yes</td><td><span class="tag away" style="background:rgba(224,168,50,0.2);color:#e0c060;border:1px solid rgba(224,168,50,0.3)">Away</span></td></tr>
+            <tr><td>*</td><td class="highlight">4/18/26</td><td class="highlight">Mt. SAC Relays</td><td>Mt. Sac CC</td><td>Walnut</td><td>TBD</td><td>TBD</td><td>Yes</td><td><span class="tag invitational" style="background:rgba(74,144,217,0.2);color:#6aaee8;border:1px solid rgba(74,144,217,0.3)">Invite</span></td></tr>
+            <tr><td>14</td><td class="highlight">4/23/26</td><td class="highlight">Patriot Dual Meet</td><td>Ramona HS</td><td>Riverside</td><td>—</td><td>—</td><td>No</td><td><span class="tag home" style="background:rgba(61,184,122,0.15);color:#60d090;border:1px solid rgba(61,184,122,0.2)">Home</span></td></tr>
+            <tr><td>—</td><td class="highlight">4/29/26</td><td class="highlight">RVL Finals</td><td>Patriot HS</td><td>Jurupa Valley</td><td>11:30am</td><td>10:00pm</td><td>Yes</td><td><span class="tag invitational" style="background:rgba(74,144,217,0.2);color:#6aaee8;border:1px solid rgba(74,144,217,0.3)">League</span></td></tr>
+            <tr><td>—</td><td class="highlight">5/9/26</td><td class="highlight">CIF Prelims</td><td>Ontario HS</td><td>Ontario</td><td>TBD</td><td>TBD</td><td>TBD</td><td><span class="tag invitational" style="background:rgba(74,144,217,0.2);color:#6aaee8;border:1px solid rgba(74,144,217,0.3)">Post</span></td></tr>
+            <tr><td>—</td><td class="highlight">5/16/26</td><td class="highlight">CIF Finals</td><td>Moorpark HS</td><td>Moorpark</td><td>TBD</td><td>TBD</td><td>TBD</td><td><span class="tag invitational" style="background:rgba(74,144,217,0.2);color:#6aaee8;border:1px solid rgba(74,144,217,0.3)">Post</span></td></tr>
+            <tr><td>—</td><td class="highlight">5/23/26</td><td class="highlight">CIF Masters</td><td>TBD</td><td>TBD</td><td>TBD</td><td>TBD</td><td>TBD</td><td><span class="tag invitational" style="background:rgba(74,144,217,0.2);color:#6aaee8;border:1px solid rgba(74,144,217,0.3)">Post</span></td></tr>
+            <tr><td>—</td><td class="highlight">5/30/26</td><td class="highlight">State Meet</td><td>TBD</td><td>TBD</td><td>TBD</td><td>TBD</td><td>TBD</td><td><span class="tag invitational" style="background:rgba(74,144,217,0.2);color:#6aaee8;border:1px solid rgba(74,144,217,0.3)">State</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- MEET PLANNING -->
+    <div class="panel" id="panel-meetplanning">
+      <div class="panel-header">
+        <div class="panel-title">Meet Planning</div>
+        <div class="panel-sub">Individual meet breakdowns and logistics</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><div class="dot"></div>Blue vs White Intrasquad — 2/12/26</div>
+        <div class="grid-2">
+          <div>
+            <div class="section-title" style="margin-top:0">Event Order (Field)</div>
+            <div class="info-row"><span class="info-key">3:30 PM</span><span class="info-val">Girls Shot Put / Boys Discus</span></div>
+            <div class="info-row"><span class="info-key">5:30 PM</span><span class="info-val">Boys Shot Put / Girls Discus</span></div>
+          </div>
+          <div>
+            <div class="section-title" style="margin-top:0">Event Order (Track)</div>
+            <div class="info-row"><span class="info-key">4:30 PM</span><span class="info-val">4×100 Relay</span></div>
+            <div class="info-row"><span class="info-key">4:45 PM</span><span class="info-val">1600m Run</span></div>
+            <div class="info-row"><span class="info-key">5:00 PM</span><span class="info-val">100m Hurdles (G) / 110m HH (B)</span></div>
+            <div class="info-row"><span class="info-key">5:25 PM</span><span class="info-val">400m</span></div>
+            <div class="info-row"><span class="info-key">5:40 PM</span><span class="info-val">100m Dash</span></div>
+            <div class="info-row"><span class="info-key">6:00 PM</span><span class="info-val">800m Run</span></div>
+            <div class="info-row"><span class="info-key">6:15 PM</span><span class="info-val">300m Hurdles (G/B)</span></div>
+            <div class="info-row"><span class="info-key">6:30 PM</span><span class="info-val">200m Dash</span></div>
+            <div class="info-row"><span class="info-key">6:40 PM</span><span class="info-val">3200m Run</span></div>
+            <div class="info-row"><span class="info-key">7:00 PM</span><span class="info-val">4×400 Relay</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><div class="dot"></div>Notes / Planning Space</div>
+        <textarea class="note-area" placeholder="Plan out upcoming meets, logistics, event orders..." rows="6"></textarea>
+      </div>
+    </div>
+
+    <!-- INVENTORY -->
+    <div class="panel" id="panel-inventory">
+      <div class="panel-header">
+        <div class="panel-title">Inventory</div>
+        <div class="panel-sub">Uniforms, equipment, snack bar</div>
+      </div>
+
+      <div class="section-title">New Uniforms</div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><div class="dot"></div>Tops — New</div>
+          <table><thead><tr><th>Size</th><th>Men's</th><th>Women's</th></tr></thead><tbody>
+            <tr><td>XS</td><td>0</td><td>0</td></tr>
+            <tr><td>S</td><td>30</td><td>20</td></tr>
+            <tr><td>M</td><td>37</td><td>30</td></tr>
+            <tr><td>L</td><td>15</td><td>26</td></tr>
+            <tr><td>XL</td><td>5</td><td>1</td></tr>
+            <tr><td>XXL</td><td>2</td><td>5</td></tr>
+            <tr><td>XXXL</td><td>3</td><td>—</td></tr>
+          </tbody></table>
+        </div>
+        <div class="card">
+          <div class="card-title"><div class="dot"></div>Bottoms — New</div>
+          <table><thead><tr><th>Size</th><th>Men's</th><th>Women's</th></tr></thead><tbody>
+            <tr><td>XS</td><td>5</td><td>1</td></tr>
+            <tr><td>S</td><td>4</td><td>1</td></tr>
+            <tr><td>M</td><td>0</td><td>3</td></tr>
+            <tr><td>L</td><td>0</td><td>4</td></tr>
+            <tr><td>XL</td><td>4</td><td>7</td></tr>
+            <tr><td>XXL</td><td>8</td><td>4</td></tr>
+            <tr><td>XXXL</td><td>3</td><td>—</td></tr>
+          </tbody></table>
+        </div>
+      </div>
+
+      <div class="section-title">Loaner Uniforms</div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><div class="dot"></div>Tops — Loaners</div>
+          <table><thead><tr><th>Size</th><th>Men's</th><th>Women's</th></tr></thead><tbody>
+            <tr><td>S</td><td>9</td><td>2</td></tr>
+            <tr><td>M</td><td>10</td><td>5</td></tr>
+            <tr><td>L</td><td>5</td><td>4</td></tr>
+            <tr><td>XL</td><td>1</td><td>5</td></tr>
+            <tr><td>XXL</td><td>6</td><td>0</td></tr>
+            <tr><td>XXXL</td><td>4</td><td>1</td></tr>
+          </tbody></table>
+        </div>
+        <div class="card">
+          <div class="card-title"><div class="dot"></div>Equipment</div>
+          <div class="inv-row"><span class="inv-name">Water Jugs</span><span class="inv-qty">—</span></div>
+          <div class="inv-row"><span class="inv-name">Needle Spikes</span><span class="inv-qty">—</span></div>
+          <div class="inv-row"><span class="inv-name">EZ Ups</span><span class="inv-qty">2</span></div>
+          <div class="inv-row"><span class="inv-name">EZ Up Walls</span><span class="inv-qty">3</span></div>
+          <div class="inv-row"><span class="inv-name">Tarps</span><span class="inv-qty">2</span></div>
+          <div style="margin-top:12px;">
+            <div class="card-title" style="margin-bottom:8px;"><div class="dot"></div>Snack Bar</div>
+            <textarea class="note-area" placeholder="Add snack bar inventory here..." rows="3"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FINANCIALS -->
+    <div class="panel" id="panel-financials">
+      <div class="panel-header">
+        <div class="panel-title">Financials</div>
+        <div class="panel-sub">Budget, bank, stipends, orders</div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><div class="dot"></div>Track Bank</div>
+          <div style="margin-bottom:16px;">
+            <div class="fin-label">Men's Account</div>
+            <div class="fin-balance">$2,000</div>
+          </div>
+          <div>
+            <div class="fin-label">Women's Account</div>
+            <div class="fin-balance" style="color:var(--gray)">$?</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title"><div class="dot"></div>Stipends</div>
+          <div class="info-row"><span class="info-key">Total Pot</span><span class="info-val">—</span></div>
+          <div class="info-row"><span class="info-key">Men's Head</span><span class="info-val">—</span></div>
+          <div class="info-row"><span class="info-key">Women's Head</span><span class="info-val">—</span></div>
+          <div class="info-row"><span class="info-key">Assistants</span><span class="info-val">—</span></div>
+          <hr class="divider">
+          <div class="card-title" style="margin-bottom:8px;"><div class="dot"></div>Fundraisers</div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Cheesecake fundraiser</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Vertical Rise</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Car wash</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Chocolate candy bar sales</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Hurdle Clinic ($20/session)</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Restaurant fundraiser (De'Matteo's)</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><div class="dot"></div>Orders / Purchases Log</div>
+        <textarea class="note-area" placeholder="Log orders here: item, vendor, cost, status..." rows="5"></textarea>
+      </div>
+    </div>
+
+    <!-- MEETINGS -->
+    <div class="panel" id="panel-meetings">
+      <div class="panel-header">
+        <div class="panel-title">Meetings</div>
+        <div class="panel-sub">Monday athlete meetings, coach meetings, parent/coach night</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><div class="dot"></div>Weekly Monday Meeting Template</div>
+        <div class="info-row"><span class="info-key">Time</span><span class="info-val">Before practice · Team circle</span></div>
+        <div class="info-row"><span class="info-key">Format</span><span class="info-val">Take a knee, no talking</span></div>
+        <div class="info-row"><span class="info-key">Recurring Items</span><span class="info-val">Weekly outlook, reminders, shoutouts</span></div>
+        <hr class="divider">
+        <div class="card-title" style="margin-bottom:8px;"><div class="dot"></div>This Week's Agenda</div>
+        <textarea class="note-area" placeholder="Add this week's meeting agenda..." rows="4"></textarea>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><div class="dot"></div>Coaches Meeting Notes</div>
+        <textarea class="note-area" placeholder="Log coach meeting notes, decisions, action items..." rows="5"></textarea>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><div class="dot"></div>Parent/Coach Meeting — 2/10/26</div>
+        <div class="info-row"><span class="info-key">Date</span><span class="info-val">Feb 10, 2026 · 6:30pm</span></div>
+        <div class="info-row"><span class="info-key">Location</span><span class="info-val">Room 240</span></div>
+        <div class="info-row"><span class="info-key">Lettering Bonus</span><span class="info-val">+2 points for parent attendance</span></div>
+        <hr class="divider">
+        <div class="section-title" style="margin-top:0">Agenda Items</div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Introduce coaching staff</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>This year's mission & culture</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Participation requirements (2.0 GPA, physical, clearance)</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Uniform pricing ($50 singlet, $25 spandex, $75 warm-up)</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Lettering system overview</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Travel rules & waivers</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Meet schedule overview</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Fundraising & payments info</span></div>
+      </div>
+    </div>
+
+    <!-- RULES -->
+    <div class="panel" id="panel-rules">
+      <div class="panel-header">
+        <div class="panel-title">Rules & Expectations</div>
+        <div class="panel-sub">Team conduct, attendance, lettering, travel</div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><div class="dot"></div>Attendance Policy</div>
+          <div class="info-row"><span class="info-key">Practice Time</span><span class="info-val">M–F · 4:00–6:00pm</span></div>
+          <div class="info-row"><span class="info-key">"On Time"</span><span class="info-val">15 min early = on time. On time = late.</span></div>
+          <div class="info-row"><span class="info-key">Late to Warm-Up</span><span class="info-val">3 laps</span></div>
+          <div class="info-row"><span class="info-key">1 Unexcused</span><span class="info-val">No meet that week</span></div>
+          <div class="info-row"><span class="info-key">3 Unexcused</span><span class="info-val">Team removal</span></div>
+          <div class="info-row"><span class="info-key">Key Rule</span><span class="info-val">Communicate with coaches!</span></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><div class="dot"></div>Lettering Requirements</div>
+          <div class="info-row"><span class="info-key">Points Needed</span><span class="info-val">30 points</span></div>
+          <div class="info-row"><span class="info-key">GPA Requirement</span><span class="info-val">2.0+ (3rd Quarter)</span></div>
+          <div class="info-row"><span class="info-key">Must Complete</span><span class="info-val">Regular season (last week of April)</span></div>
+          <div class="info-row"><span class="info-key">No Debts</span><span class="info-val">Must clear school debts</span></div>
+          <div class="info-row"><span class="info-key">Conduct</span><span class="info-val">Good standing required at all times</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><div class="dot"></div>Discipline System</div>
+        <div class="info-row"><span class="info-key">Step 1</span><span class="info-val">Conference with Lewis or Cobian</span></div>
+        <div class="info-row"><span class="info-key">Step 2</span><span class="info-val">Parent/guardian notification & warning</span></div>
+        <div class="info-row"><span class="info-key">Step 3</span><span class="info-val">Removal from team</span></div>
+        <div class="info-row"><span class="info-key">Fighting</span><span class="info-val" style="color:var(--danger)">Immediate dismissal</span></div>
+        <div class="info-row"><span class="info-key">Behavioral Issues</span><span class="info-val">Leave for day → miss meet → removed from team</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><div class="dot"></div>Track Etiquette</div>
+        <div class="check-item"><input type="checkbox" checked disabled><span>"TRACK!" = you're in the way — look and move</span></div>
+        <div class="check-item"><input type="checkbox" checked disabled><span>Always look right before stepping on the track</span></div>
+        <div class="check-item"><input type="checkbox" checked disabled><span>Cheer on teammates at meets AND at practice</span></div>
+        <div class="check-item"><input type="checkbox" checked disabled><span>Wherever we go, we leave it better than we found it</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><div class="dot"></div>Coaching Philosophy</div>
+        <textarea class="note-area" placeholder="Growth mindset. Building young adults, not just athletes..." rows="3">Growth Mindset + Building Young Adults, Not Just Athletes.
+
+Motto: "Be Better Than Yesterday"
+
+Entries are due the FRIDAY before an event. Show up. Give full effort.</textarea>
+      </div>
+    </div>
+
+    <!-- TRADITIONS -->
+    <div class="panel" id="panel-traditions">
+      <div class="panel-header">
+        <div class="panel-title">Traditions</div>
+        <div class="panel-sub">Culture builders and team identity moments</div>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="dot"></div>Current & Planned Traditions</div>
+        <div class="empty">
+          <div class="empty-icon">🏆</div>
+          <p>Add your team traditions here — awards, rituals, events that make Ramona T&F culture.</p>
+        </div>
+        <textarea class="note-area" placeholder="e.g. Blue vs White Intrasquad meet, Beach Bonding Day, Rammy Horns on Ramona Day..." rows="4"></textarea>
+      </div>
+    </div>
+
+    <!-- CLUBS -->
+    <div class="panel" id="panel-clubs">
+      <div class="panel-header">
+        <div class="panel-title">Clubs</div>
+        <div class="panel-sub">TNF Club & Unified Champions Club</div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><div class="dot"></div>TNF Club</div>
+          <div class="info-row"><span class="info-key">Advisor</span><span class="info-val">Edgar Cobian</span></div>
+          <div class="info-row"><span class="info-key">Email</span><span class="info-val">ecobian@riversideunified.org</span></div>
+          <div class="info-row"><span class="info-key">President</span><span class="info-val">Amanda Lara</span></div>
+          <div class="info-row"><span class="info-key">VP</span><span class="info-val">Christopher Hammond</span></div>
+          <div class="info-row"><span class="info-key">Meeting Room</span><span class="info-val">Room 41</span></div>
+          <hr class="divider">
+          <div class="section-title" style="margin-top:0">Upcoming Events</div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Homecoming (26–27)</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Club Rush (26–27)</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Ramona Day 5/5/26 — Sell Rammy Horns ($15–20)</span></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><div class="dot"></div>Unified Champions Club</div>
+          <div class="info-row"><span class="info-key">Advisor</span><span class="info-val">Zachary Lewis</span></div>
+          <div class="info-row"><span class="info-key">Email</span><span class="info-val">zlewis@riversideunified.org</span></div>
+          <div class="info-row"><span class="info-key">President</span><span class="info-val">Elisa Sanchez</span></div>
+          <div class="info-row"><span class="info-key">VP</span><span class="info-val">Ariel Vera</span></div>
+          <div class="info-row"><span class="info-key">Meeting Room</span><span class="info-val">Room 240</span></div>
+          <hr class="divider">
+          <div class="section-title" style="margin-top:0">To-Do</div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Get W-9 form</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Register athletes</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Get uniforms that satisfy requirements</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Put together teams</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Confirm shot put weight for Unified</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Dodgeball tourney (TBD)</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Ramona Day plans (TBD)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BEACH DAY -->
+    <div class="panel" id="panel-beachday">
+      <div class="panel-header">
+        <div class="panel-title">🏖️ Track & Field Beach Day</div>
+        <div class="panel-sub">Annual team bonding event — Huntington Beach</div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><div class="dot"></div>Event Details</div>
+          <div class="info-row"><span class="info-key">Date</span><span class="info-val">Saturday · TBD (prev. 6/4/22)</span></div>
+          <div class="info-row"><span class="info-key">Location</span><span class="info-val">Huntington Beach</span></div>
+          <div class="info-row"><span class="info-key">Activities</span><span class="info-val">Football · Bonfire · Volleyball</span></div>
+          <hr class="divider">
+          <div class="card-title" style="margin-bottom:8px;"><div class="dot"></div>Pre-Event To-Do</div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Create official flyer</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Send out invites</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Confirm date & headcount</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Secure transportation</span></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><div class="dot"></div>Shopping List</div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Ice chest</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Firewood</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Snacks</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Drinks</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Ice</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Umbrella</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Fire starters + lighter</span></div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><div class="dot"></div>Coach Packing List</div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Sunscreen</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Extra towels</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Snacks + drinks</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Football</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Lawn chairs</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Fire starters + lighter + firewood</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Ice chest (stocked)</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Hoodie + sweats (it gets cold)</span></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><div class="dot"></div>Athletes Packing List (to send out)</div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Sunscreen</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Towels</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Snacks + water/drinks</span></div>
+          <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span>Hoodie + warm clothes</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><div class="dot"></div>Notes</div>
+        <textarea class="note-area" placeholder="Add logistics, parent permission info, flyer drafts..." rows="4"></textarea>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  // NAV
+  function showPanel(id) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('panel-' + id).classList.add('active');
+    event.currentTarget.classList.add('active');
+  }
+
+  // TODOS
+  let todos = JSON.parse(localStorage.getItem('hc_todos') || '[]');
+
+  // Pre-populate with current to-dos from voice notes
+  if (todos.length === 0) {
+    todos = [
+      { id: Date.now()+1, text: 'Update roster — cut inactive athletes, add new joiners', priority: 'urgent', category: 'Roster', done: false },
+      { id: Date.now()+2, text: 'Verify physicals are up to date for all athletes', priority: 'urgent', category: 'Roster', done: false },
+      { id: Date.now()+3, text: 'Confirm all travel liability forms are signed', priority: 'urgent', category: 'Roster', done: false },
+      { id: Date.now()+4, text: 'Make bus check-off list for tonight\'s away meet', priority: 'urgent', category: 'Meet Logistics', done: false },
+      { id: Date.now()+5, text: 'Make class excuse list for away meet', priority: 'urgent', category: 'Meet Logistics', done: false },
+      { id: Date.now()+6, text: 'Confirm timers for remaining home meets — are they paid?', priority: 'high', category: 'Timers/Officials', done: false },
+      { id: Date.now()+7, text: 'Confirm Red Hats for both ends of home meets — scheduled & paid?', priority: 'high', category: 'Timers/Officials', done: false },
+      { id: Date.now()+8, text: 'Go to Sam\'s Club — snack bar supplies for Thursday home meet', priority: 'high', category: 'Snack Bar', done: false },
+      { id: Date.now()+9, text: 'Arrange Little Caesar\'s pizza pickup for Thursday snack bar', priority: 'high', category: 'Snack Bar', done: false },
+      { id: Date.now()+10, text: 'Make sure cash box is stocked for snack bar', priority: 'high', category: 'Snack Bar', done: false },
+      { id: Date.now()+11, text: 'Confirm Age\'s mom can work the snack bar Thursday', priority: 'high', category: 'Snack Bar', done: false },
+      { id: Date.now()+12, text: 'Look into district clearance requirements for snack bar volunteers (food handler certs?)', priority: 'normal', category: 'Snack Bar', done: false },
+      { id: Date.now()+13, text: 'Review & update full meet schedule — check all times, class release times', priority: 'normal', category: 'Schedule', done: false },
+      { id: Date.now()+14, text: 'Order warm-ups — decide cotton vs windbreaker', priority: 'normal', category: 'Uniforms', done: false },
+      { id: Date.now()+15, text: 'Finalize team shirt design — navy blue plain shirts', priority: 'normal', category: 'Uniforms', done: false },
+    ];
+    saveTodos();
+  }
+
+  function saveTodos() {
+    localStorage.setItem('hc_todos', JSON.stringify(todos));
+  }
+
+  function renderTodos() {
+    const list = document.getElementById('todo-list');
+    const grouped = {};
+    todos.forEach(t => {
+      if (!grouped[t.category]) grouped[t.category] = [];
+      grouped[t.category].push(t);
+    });
+
+    list.innerHTML = '';
+    Object.entries(grouped).forEach(([cat, items]) => {
+      const section = document.createElement('div');
+      section.innerHTML = `<div class="section-title">${cat}</div>`;
+      items.forEach(t => {
+        const pMap = { urgent: 'p-urgent', high: 'p-high', normal: 'p-normal', low: 'p-low' };
+        const pLabel = { urgent: 'Urgent', high: 'High', normal: 'Normal', low: 'Low' };
+        const div = document.createElement('div');
+        div.className = 'todo-item' + (t.done ? ' done' : '');
+        div.innerHTML = `
+          <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTodo(${t.id})">
+          <span class="todo-text">${t.text}</span>
+          <span class="priority-badge ${pMap[t.priority]}">${pLabel[t.priority]}</span>
+          <button class="btn btn-sm btn-danger" onclick="deleteTodo(${t.id})">✕</button>
+        `;
+        section.appendChild(div);
+      });
+      list.appendChild(section);
+    });
+  }
+
+  function addTodo() {
+    const input = document.getElementById('todo-input');
+    const priority = document.getElementById('todo-priority').value;
+    const category = document.getElementById('todo-category').value;
+    const text = input.value.trim();
+    if (!text) return;
+    todos.unshift({ id: Date.now(), text, priority, category, done: false });
+    saveTodos();
+    renderTodos();
+    input.value = '';
+  }
+
+  function toggleTodo(id) {
+    const t = todos.find(t => t.id === id);
+    if (t) { t.done = !t.done; saveTodos(); renderTodos(); }
+  }
+
+  function deleteTodo(id) {
+    todos = todos.filter(t => t.id !== id);
+    saveTodos();
+    renderTodos();
+  }
+
+  // CHECKLIST TOGGLE
+  function toggleCheck(el) {
+    const cb = el.querySelector('input[type="checkbox"]');
+    const span = el.querySelector('span');
+    cb.checked = !cb.checked;
+    el.classList.toggle('checked', cb.checked);
+  }
+
+  // WISH LIST ADD
+  function addWishItem() {
+    const input = document.getElementById('wish-item-input');
+    const text = input.value.trim();
+    if (!text) return;
+    const div = document.createElement('div');
+    div.className = 'check-item';
+    div.onclick = function() { toggleCheck(this); };
+    div.innerHTML = `<input type="checkbox"><span>${text}</span>`;
+    document.getElementById('wish-items').appendChild(div);
+    input.value = '';
+  }
+
+  // INIT
+  renderTodos();
+</script>
+</body>
+</html>
