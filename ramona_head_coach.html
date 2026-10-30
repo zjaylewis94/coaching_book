@@ -785,6 +785,11 @@
 
       <div id="todo-list"></div>
 
+      <div class="card" style="margin-top:8px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+        <div class="panel-sub" style="margin:0">Your to-dos live in this browser only. Save a copy now and then.</div>
+        <div style="display:flex;gap:8px"><button class="btn btn-sm" onclick="backupTodos()">💾 Backup</button><button class="btn btn-sm btn-ghost" onclick="restoreTodos()">↥ Restore</button></div>
+      </div>
+
       <div class="card" style="margin-top:8px;">
         <div class="card-title"><div class="dot"></div>Notes / Brain Dump</div>
         <textarea class="note-area" rows="6" id="main-notes">GENERAL NOTES:
@@ -1422,6 +1427,31 @@ Entries are due the FRIDAY before an event. Show up. Give full effort.</textarea
 
   function saveTodos() {
     localStorage.setItem('hc_todos', JSON.stringify(todos));
+  }
+
+  // Backup / restore the to-do list as a JSON file (it only lives in this browser's storage).
+  function backupTodos() {
+    const blob = new Blob([JSON.stringify({ book: 'head_coach_hq', saved: new Date().toISOString(), data: { hc_todos: localStorage.getItem('hc_todos') } }, null, 1)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = 'head_coach_todos_backup_' + new Date().toISOString().slice(0, 10) + '.json';
+    document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+  }
+  function restoreTodos() {
+    const inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'application/json,.json';
+    inp.onchange = () => {
+      const f = inp.files[0]; if (!f) return;
+      const r = new FileReader();
+      r.onload = () => {
+        let j = null; try { j = JSON.parse(r.result); } catch (e) {}
+        let list = null; try { list = j && j.book === 'head_coach_hq' ? JSON.parse(j.data.hc_todos || '[]') : null; } catch (e) {}
+        if (!Array.isArray(list)) { alert("That file isn't a Head Coach HQ backup."); return; }
+        if (!confirm('Replace your to-do list with the backup from ' + String(j.saved || '').slice(0, 10) + ' (' + list.length + ' tasks)?')) return;
+        todos = list; saveTodos(); renderTodos();
+      };
+      r.readAsText(f);
+    };
+    inp.click();
   }
 
   function renderTodos() {
