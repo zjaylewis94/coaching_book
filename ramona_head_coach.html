@@ -96,6 +96,9 @@
     gap: 12px;
   }
 
+  .sync-bad { color: #e05252; border-color: #e05252; }
+  .sync-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 16px; }
+  .sync-box { width: 100%; max-width: 420px; margin: 0; }
   .motto-pill {
     background: var(--navy-mid);
     border: 1px solid var(--navy-light);
@@ -275,7 +278,7 @@
     margin-bottom: 12px;
   }
 
-  .todo-input-row input {
+  .todo-input-row input, .sync-box input {
     flex: 1;
     background: var(--navy-mid);
     border: 1px solid var(--navy-light);
@@ -608,6 +611,10 @@
     .nav-item span:last-child { display: none; }
     .grid-2, .grid-3 { grid-template-columns: 1fr; }
     .main { padding: 16px; }
+    .motto-pill { display: none; }
+    .logo-text span:last-child { letter-spacing: 1px; }
+    #hc-sync { white-space: nowrap; }
+    header { padding: 0 12px; }
   }
 </style>
 </head>
@@ -622,6 +629,7 @@
     </div>
   </div>
   <div class="header-right">
+    <button class="btn btn-sm btn-ghost" id="hc-sync" onclick="openSync()">☁ Sync off</button>
     <div class="motto-pill">Be Better Than Yesterday</div>
   </div>
 </header>
@@ -1427,13 +1435,16 @@ Entries are due the FRIDAY before an event. Show up. Give full effort.</textarea
 
   function saveTodos() {
     localStorage.setItem('hc_todos', JSON.stringify(todos));
+    if (typeof hcChanged === 'function') hcChanged();
   }
 
   // Backup / restore the to-do list as a JSON file (it only lives in this browser's storage).
   // Backups hold every hc_* key: to-dos, notes, checks, added wish items. Older backups held only hc_todos.
+  // The sync token and sync bookkeeping (hc_gh_*, hc_sync_*) stay out of backup files.
+  const hcOwnKey = k => k.startsWith('hc_') && !k.startsWith('hc_gh') && !k.startsWith('hc_sync');
   function hcData() {
     const data = {};
-    for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k.startsWith('hc_')) data[k] = localStorage.getItem(k); }
+    for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (hcOwnKey(k)) data[k] = localStorage.getItem(k); }
     return data;
   }
   function backupTodos() {
@@ -1452,7 +1463,7 @@ Entries are due the FRIDAY before an event. Show up. Give full effort.</textarea
         let j = null; try { j = JSON.parse(r.result); } catch (e) {}
         let list = null; try { list = j && j.book === 'head_coach_hq' && j.data ? JSON.parse(j.data.hc_todos || '[]') : null; } catch (e) {}
         if (!Array.isArray(list)) { alert("That file isn't a Head Coach HQ backup."); return; }
-        const keys = Object.keys(j.data).filter(k => k.startsWith('hc_') && typeof j.data[k] === 'string');
+        const keys = Object.keys(j.data).filter(k => hcOwnKey(k) && typeof j.data[k] === 'string');
         const what = keys.length > 1 ? 'your to-dos, notes and checklists' : 'your to-do list';
         if (!confirm('Replace ' + what + ' with the backup from ' + String(j.saved || '').slice(0, 10) + ' (' + list.length + ' tasks)?')) return;
         keys.forEach(k => localStorage.setItem(k, j.data[k]));
@@ -1524,6 +1535,7 @@ Entries are due the FRIDAY before an event. Show up. Give full effort.</textarea
     const checks = loadJSON('hc_checks', {});
     if (cb.checked) checks[el.dataset.key] = true; else delete checks[el.dataset.key];
     localStorage.setItem('hc_checks', JSON.stringify(checks));
+    hcChanged();
   }
 
   // WISH LIST ADD
@@ -1532,56 +1544,80 @@ Entries are due the FRIDAY before an event. Show up. Give full effort.</textarea
     const text = input.value.trim();
     if (!text) return;
     const added = loadJSON('hc_wish_added', []);
-    added.push(text);
+    if (!added.includes(text)) added.push(text);
     localStorage.setItem('hc_wish_added', JSON.stringify(added));
-    keyChecks(addedWishItem(text));
     input.value = '';
+    renderWishAdded();
+    hcChanged();
   }
   function addedWishItem(text) {
     const div = document.createElement('div');
-    div.className = 'check-item';
+    div.className = 'check-item'; div.dataset.added = '1';
     div.onclick = function() { toggleCheck(this); };
     div.innerHTML = '<input type="checkbox"><span></span><button class="btn btn-sm btn-ghost" style="margin-left:auto;padding:2px 8px" title="Remove">×</button>';
     div.querySelector('span').textContent = text;
     div.querySelector('button').onclick = e => {
       e.stopPropagation();
       if (!confirm('Remove "' + text + '"?')) return;
-      const added = loadJSON('hc_wish_added', []);
-      const i = added.indexOf(text); if (i >= 0) added.splice(i, 1);
-      localStorage.setItem('hc_wish_added', JSON.stringify(added));
+      localStorage.setItem('hc_wish_added', JSON.stringify(loadJSON('hc_wish_added', []).filter(w => w !== text)));
       const checks = loadJSON('hc_checks', {}); delete checks[div.dataset.key];
       localStorage.setItem('hc_checks', JSON.stringify(checks));
       div.remove();
+      hcChanged();
     };
     document.getElementById('wish-items').appendChild(div);
-    return div;
+  }
+  function renderWishAdded() {
+    document.querySelectorAll('#wish-items .check-item[data-added]').forEach(el => el.remove());
+    loadJSON('hc_wish_added', []).forEach(addedWishItem);
+    keyChecks();
+    applyChecks();
   }
 
-  // SAVED NOTES + CHECKS (this browser only; hc_* keys)
+  // SAVED NOTES + CHECKS (hc_* keys in this browser; Sync copies them to GitHub)
   function loadJSON(key, fallback) {
     try { const v = JSON.parse(localStorage.getItem(key)); return v == null ? fallback : v; } catch (e) { return fallback; }
   }
   // A checkbox is known by its panel, its card's title and its text (plus a count when a card repeats a line).
-  function keyChecks(only) {
+  function keyChecks() {
     const seen = {};
     document.querySelectorAll('.check-item').forEach(el => {
       if (!el.querySelector('input[type="checkbox"]:not([disabled])')) return;
       const panel = el.closest('.panel'), card = el.closest('.card'), title = card && card.querySelector('.card-title');
-      let key = (panel ? panel.id : '') + '|' + (title ? title.textContent.trim() : '') + '|' + el.querySelector('span').textContent.trim();
+      let key = (panel ? panel.id : '') + '|' + (title ? title.dataset.title || title.textContent.trim() : '') + '|' + el.querySelector('span').textContent.trim();
       seen[key] = (seen[key] || 0) + 1;
       if (seen[key] > 1) key += '#' + seen[key];
-      if (!only || only === el) el.dataset.key = key;
+      el.dataset.key = key;
     });
   }
-  function loadSaved() {
-    loadJSON('hc_wish_added', []).forEach(addedWishItem);
-    keyChecks();
+  function applyChecks() {
     const checks = loadJSON('hc_checks', {});
     document.querySelectorAll('.check-item[data-key]').forEach(el => {
       const on = !!checks[el.dataset.key];
       el.querySelector('input').checked = on;
       el.classList.toggle('checked', on);
     });
+  }
+  // Note boxes: known by panel + position in it. Saved text replaces the starter text; untouched boxes keep it.
+  let notesPending = {}, notesTimer = null;
+  function flushNotes() {
+    clearTimeout(notesTimer); notesTimer = null;
+    if (!Object.keys(notesPending).length) return;
+    localStorage.setItem('hc_notes', JSON.stringify(Object.assign(loadJSON('hc_notes', {}), notesPending)));
+    notesPending = {};
+    hcChanged();
+  }
+  function applyNotes() {
+    const notes = loadJSON('hc_notes', {});
+    document.querySelectorAll('textarea.note-area[data-key]').forEach(ta => {
+      const k = ta.dataset.key;
+      if (k in notes && !(k in notesPending) && ta.value !== notes[k]) ta.value = notes[k];
+    });
+  }
+  function loadSaved() {
+    // Card titles get buttons below, so keep their plain text for checkbox keys.
+    document.querySelectorAll('.card-title').forEach(t => { t.dataset.title = t.textContent.trim(); });
+    renderWishAdded();
     // Meet-day lists get reused every meet, so each checklist card gets a reset.
     document.querySelectorAll('#panel-checklists .card').forEach(card => {
       const items = card.querySelectorAll('.check-item[data-key]'), title = card.querySelector('.card-title');
@@ -1592,27 +1628,174 @@ Entries are due the FRIDAY before an event. Show up. Give full effort.</textarea
         const checks = loadJSON('hc_checks', {});
         items.forEach(el => { el.querySelector('input').checked = false; el.classList.remove('checked'); delete checks[el.dataset.key]; });
         localStorage.setItem('hc_checks', JSON.stringify(checks));
+        hcChanged();
       };
       title.appendChild(b);
     });
-    // Note boxes: known by panel + position in it. Saved text replaces the starter text; untouched boxes keep it.
-    const notes = loadJSON('hc_notes', {});
-    let timer = null;
-    const save = () => { clearTimeout(timer); timer = null; localStorage.setItem('hc_notes', JSON.stringify(notes)); };
     document.querySelectorAll('.panel').forEach(panel => {
       panel.querySelectorAll('textarea.note-area').forEach((ta, i) => {
-        const key = panel.id + '#' + i;
-        if (key in notes) ta.value = notes[key];
-        ta.addEventListener('input', () => { notes[key] = ta.value; clearTimeout(timer); timer = setTimeout(save, 400); });
+        ta.dataset.key = panel.id + '#' + i;
+        ta.addEventListener('input', () => { notesPending[ta.dataset.key] = ta.value; clearTimeout(notesTimer); notesTimer = setTimeout(flushNotes, 400); });
       });
     });
-    window.addEventListener('pagehide', () => { if (timer) save(); });
-    document.addEventListener('visibilitychange', () => { if (document.hidden && timer) save(); });
+    applyNotes();
+    window.addEventListener('pagehide', flushNotes);
+    document.addEventListener('visibilitychange', () => { if (document.hidden) flushNotes(); });
+  }
+
+  // ── GITHUB SYNC ──
+  // Everything above becomes a flat list of items (todo:<id>, note:<box>, check:<line>, wish:<text>), each stamped
+  // with when it last changed here. Sync merges that list with head_coach_data.json in the private subroutine-data
+  // repo item by item, newest stamp winning, so edits on two devices don't wipe each other. A deleted or unchecked
+  // item is kept as null so the deletion spreads too. The token never goes in backups (hc_gh_* / hc_sync_* are skipped).
+  const HC_REPO = 'zjaylewis94/subroutine-data', HC_FILE = 'head_coach_data.json';
+  const hcCfg = () => loadJSON('hc_gh_cfg', {});
+  function hcFlat() {
+    const f = {};
+    loadJSON('hc_todos', []).forEach(t => { f['todo:' + t.id] = t; });
+    const n = loadJSON('hc_notes', {}); for (const k in n) f['note:' + k] = n[k];
+    const c = loadJSON('hc_checks', {}); for (const k in c) if (c[k]) f['check:' + k] = true;
+    loadJSON('hc_wish_added', []).forEach(w => { f['wish:' + w] = true; });
+    return f;
+  }
+  // Stamp whatever changed since the last look. Does nothing until sync is turned on.
+  function hcStamp() {
+    const s = loadJSON('hc_sync_last', null); if (!s) return false;
+    const f = hcFlat(), now = Date.now(); let changed = false;
+    for (const k in f) { const j = JSON.stringify(f[k]); if (s.v[k] !== j) { s.v[k] = j; s.t[k] = now; changed = true; } }
+    for (const k in s.v) if (!(k in f) && s.v[k] !== 'null') { s.v[k] = 'null'; s.t[k] = now; changed = true; }
+    if (changed) localStorage.setItem('hc_sync_last', JSON.stringify(s));
+    return changed;
+  }
+  let hcTimer = null;
+  function hcChanged() {
+    if (hcStamp()) { clearTimeout(hcTimer); hcTimer = setTimeout(hcSync, 2500); hcStatus('pending'); }
+  }
+  function hcApply(s) {
+    const val = k => JSON.parse(s.v[k]);
+    const keys = Object.keys(s.v).filter(k => s.v[k] !== 'null');
+    const order = loadJSON('hc_todos', []).map(t => t.id);
+    const rank = t => { const i = order.indexOf(t.id); return i < 0 ? -1 : i; };
+    const list = keys.filter(k => k.startsWith('todo:')).map(val)
+      .sort((a, b) => (rank(a) - rank(b)) || (b.id - a.id));
+    const notes = {}, checks = {};
+    keys.filter(k => k.startsWith('note:')).forEach(k => { notes[k.slice(5)] = val(k); });
+    keys.filter(k => k.startsWith('check:')).forEach(k => { checks[k.slice(6)] = true; });
+    const oldWish = loadJSON('hc_wish_added', []), wish = keys.filter(k => k.startsWith('wish:')).map(k => k.slice(5));
+    wish.sort((a, b) => { const i = oldWish.indexOf(a), j = oldWish.indexOf(b); return (i < 0 ? 1e9 : i) - (j < 0 ? 1e9 : j); });
+    localStorage.setItem('hc_todos', JSON.stringify(list));
+    localStorage.setItem('hc_notes', JSON.stringify(notes));
+    localStorage.setItem('hc_checks', JSON.stringify(checks));
+    localStorage.setItem('hc_wish_added', JSON.stringify(wish));
+    todos = list; renderTodos(); renderWishAdded(); applyNotes();
+  }
+  const b64 = s => btoa(unescape(encodeURIComponent(s)));
+  const unb64 = s => decodeURIComponent(escape(atob(s.replace(/\n/g, ''))));
+  let hcBusy = false, hcAgain = false;
+  async function hcSync() {
+    const cfg = hcCfg(); if (!cfg.token) return hcStatus('off');
+    if (hcBusy) { hcAgain = true; return; }
+    hcBusy = true; clearTimeout(hcTimer); flushNotes();
+    if (!localStorage.getItem('hc_sync_last')) {
+      // First sync on this device: what's here counts as older than anything already on GitHub.
+      const s = { first: true, v: {}, t: {} }, f = hcFlat();
+      for (const k in f) { s.v[k] = JSON.stringify(f[k]); s.t[k] = 1; }
+      localStorage.setItem('hc_sync_last', JSON.stringify(s));
+    }
+    hcStamp();
+    hcStatus('busy');
+    const url = 'https://api.github.com/repos/' + HC_REPO + '/contents/' + HC_FILE;
+    const headers = { Authorization: 'Bearer ' + cfg.token, Accept: 'application/vnd.github+json' };
+    try {
+      for (let attempt = 0; attempt < 4; attempt++) {
+        const res = await fetch(url, { headers, cache: 'no-store' });
+        if (res.status !== 404 && !res.ok) throw new Error(res.status === 401 || res.status === 403 ? 'token' : 'HTTP ' + res.status);
+        const file = res.ok ? await res.json() : null;
+        const remote = file ? (JSON.parse(unb64(file.content)).items || {}) : {};
+        const s = loadJSON('hc_sync_last', null);
+        if (s.first) {
+          // Same text = same task: the starter to-dos get fresh ids on every device, so keep GitHub's copies.
+          const texts = new Set(Object.values(remote).filter(r => r.v && r.v.text).map(r => r.v.text));
+          for (const k in s.v) if (k.startsWith('todo:') && !(k in remote) && s.v[k] !== 'null' && texts.has(JSON.parse(s.v[k]).text)) { delete s.v[k]; delete s.t[k]; }
+        }
+        for (const k in remote) {
+          const r = remote[k], lt = s.t[k];
+          if (lt === undefined || r.t > lt || (r.t === lt && s.first)) { s.v[k] = JSON.stringify(r.v); s.t[k] = r.t; }
+        }
+        delete s.first;
+        localStorage.setItem('hc_sync_last', JSON.stringify(s));
+        hcApply(s);
+        const items = {}; for (const k in s.v) items[k] = { v: JSON.parse(s.v[k]), t: s.t[k] };
+        if (file && JSON.stringify(Object.keys(items).sort().map(k => [k, items[k]])) === JSON.stringify(Object.keys(remote).sort().map(k => [k, remote[k]]))) break;
+        const body = { message: 'head coach sync ' + new Date().toISOString(),
+          content: b64(JSON.stringify({ format: 'head_coach_sync_1', saved: new Date().toISOString(), items }, null, 1)) };
+        if (file) body.sha = file.sha;
+        const put = await fetch(url, { method: 'PUT', headers, body: JSON.stringify(body) });
+        if (put.ok) break;
+        if (put.status !== 409 && put.status !== 422) throw new Error(put.status === 401 || put.status === 403 ? 'token' : 'HTTP ' + put.status);
+        if (attempt === 3) throw new Error('busy');
+      }
+      localStorage.setItem('hc_sync_at', String(Date.now()));
+      hcStatus('ok');
+    } catch (e) {
+      hcStatus('fail', e.message === 'token' ? 'GitHub refused the token' : navigator.onLine === false ? 'Offline' : 'Sync failed');
+    } finally {
+      hcBusy = false;
+      if (hcAgain) { hcAgain = false; hcSync(); }
+    }
+  }
+  function hcStatus(state, msg) {
+    const b = document.getElementById('hc-sync'); if (!b) return;
+    const at = Number(localStorage.getItem('hc_sync_at')) || 0;
+    b.textContent = state === 'off' ? '☁ Sync off' : state === 'busy' ? '☁ Syncing…' : state === 'pending' ? '☁ Saving…'
+      : state === 'fail' ? '⚠ ' + msg : '☁ Synced ' + new Date(at).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    b.classList.toggle('sync-bad', state === 'fail');
+  }
+  // A token another book on this site already saved for subroutine-data (Subroutine, Teacher Book).
+  function hcFoundToken() {
+    for (const [key, name] of [['subroutine_gh_cfg', 'Subroutine'], ['teacher_book_gh_cfg', 'Teacher Book']]) {
+      const c = loadJSON(key, {});
+      if (c.token && String(c.repo || '').toLowerCase() === 'subroutine-data') return { token: c.token, name };
+    }
+    return null;
+  }
+  function openSync() {
+    document.getElementById('hc-sync-modal')?.remove();
+    const cfg = hcCfg(), found = !cfg.token && hcFoundToken();
+    const ov = document.createElement('div'); ov.id = 'hc-sync-modal'; ov.className = 'sync-modal';
+    ov.innerHTML = `<div class="card sync-box">
+      <div class="card-title"><div class="dot"></div>Sync across devices</div>
+      <div class="panel-sub" style="margin-bottom:12px">Saves to-dos, notes and checklists to <b>${HC_FILE}</b> in your private <b>subroutine-data</b> repo.
+        Use a GitHub fine-grained token with <b>Contents: read and write</b> on subroutine-data. The one Subroutine and Teacher Book use works.</div>
+      ${found ? `<button class="btn" id="hc-use-found" style="width:100%;margin-bottom:10px">Use the token ${found.name} saved here</button>` : ''}
+      <input type="password" id="hc-token" placeholder="${cfg.token ? 'Token saved (paste to replace)' : 'Paste token'}" autocomplete="off" style="width:100%;margin-bottom:10px;box-sizing:border-box">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+        ${cfg.token ? '<button class="btn btn-sm btn-danger" id="hc-sync-offbtn">Turn off</button>' : ''}
+        <button class="btn btn-sm btn-ghost" id="hc-sync-cancel">Close</button>
+        <button class="btn btn-sm" id="hc-sync-go">${cfg.token ? 'Sync now' : 'Connect'}</button>
+      </div></div>`;
+    document.body.appendChild(ov);
+    const close = () => ov.remove();
+    const connect = token => { if (token) localStorage.setItem('hc_gh_cfg', JSON.stringify({ token })); close(); hcSync(); };
+    ov.onclick = e => { if (e.target === ov) close(); };
+    ov.querySelector('#hc-sync-cancel').onclick = close;
+    ov.querySelector('#hc-sync-go').onclick = () => connect(ov.querySelector('#hc-token').value.trim() || null);
+    if (found) ov.querySelector('#hc-use-found').onclick = () => connect(found.token);
+    const off = ov.querySelector('#hc-sync-offbtn');
+    if (off) off.onclick = () => {
+      if (!confirm('Turn off sync on this device? Your data stays here and on GitHub.')) return;
+      ['hc_gh_cfg', 'hc_sync_last', 'hc_sync_at'].forEach(k => localStorage.removeItem(k));
+      close(); hcStatus('off');
+    };
   }
 
   // INIT
   renderTodos();
   loadSaved();
+  if (hcCfg().token) {
+    hcStatus('busy'); hcSync();
+    document.addEventListener('visibilitychange', () => { if (document.hidden) { if (hcTimer) hcSync(); } else hcSync(); });
+  } else hcStatus('off');
 </script>
 </body>
 </html>
