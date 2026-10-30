@@ -786,7 +786,7 @@
       <div id="todo-list"></div>
 
       <div class="card" style="margin-top:8px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
-        <div class="panel-sub" style="margin:0">Your to-dos live in this browser only. Save a copy now and then.</div>
+        <div class="panel-sub" style="margin:0">Your to-dos, notes and checklists save in this browser only. Back up now and then.</div>
         <div style="display:flex;gap:8px"><button class="btn btn-sm" onclick="backupTodos()">💾 Backup</button><button class="btn btn-sm btn-ghost" onclick="restoreTodos()">↥ Restore</button></div>
       </div>
 
@@ -1430,10 +1430,16 @@ Entries are due the FRIDAY before an event. Show up. Give full effort.</textarea
   }
 
   // Backup / restore the to-do list as a JSON file (it only lives in this browser's storage).
+  // Backups hold every hc_* key: to-dos, notes, checks, added wish items. Older backups held only hc_todos.
+  function hcData() {
+    const data = {};
+    for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k.startsWith('hc_')) data[k] = localStorage.getItem(k); }
+    return data;
+  }
   function backupTodos() {
-    const blob = new Blob([JSON.stringify({ book: 'head_coach_hq', saved: new Date().toISOString(), data: { hc_todos: localStorage.getItem('hc_todos') } }, null, 1)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify({ book: 'head_coach_hq', saved: new Date().toISOString(), data: hcData() }, null, 1)], { type: 'application/json' });
     const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob); a.download = 'head_coach_todos_backup_' + new Date().toISOString().slice(0, 10) + '.json';
+    a.href = URL.createObjectURL(blob); a.download = 'head_coach_backup_' + new Date().toISOString().slice(0, 10) + '.json';
     document.body.appendChild(a); a.click();
     setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
   }
@@ -1444,10 +1450,13 @@ Entries are due the FRIDAY before an event. Show up. Give full effort.</textarea
       const r = new FileReader();
       r.onload = () => {
         let j = null; try { j = JSON.parse(r.result); } catch (e) {}
-        let list = null; try { list = j && j.book === 'head_coach_hq' ? JSON.parse(j.data.hc_todos || '[]') : null; } catch (e) {}
+        let list = null; try { list = j && j.book === 'head_coach_hq' && j.data ? JSON.parse(j.data.hc_todos || '[]') : null; } catch (e) {}
         if (!Array.isArray(list)) { alert("That file isn't a Head Coach HQ backup."); return; }
-        if (!confirm('Replace your to-do list with the backup from ' + String(j.saved || '').slice(0, 10) + ' (' + list.length + ' tasks)?')) return;
-        todos = list; saveTodos(); renderTodos();
+        const keys = Object.keys(j.data).filter(k => k.startsWith('hc_') && typeof j.data[k] === 'string');
+        const what = keys.length > 1 ? 'your to-dos, notes and checklists' : 'your to-do list';
+        if (!confirm('Replace ' + what + ' with the backup from ' + String(j.saved || '').slice(0, 10) + ' (' + list.length + ' tasks)?')) return;
+        keys.forEach(k => localStorage.setItem(k, j.data[k]));
+        location.reload();
       };
       r.readAsText(f);
     };
@@ -1509,9 +1518,12 @@ Entries are due the FRIDAY before an event. Show up. Give full effort.</textarea
   // CHECKLIST TOGGLE
   function toggleCheck(el) {
     const cb = el.querySelector('input[type="checkbox"]');
-    const span = el.querySelector('span');
-    cb.checked = !cb.checked;
+    // A tap right on the box has already flipped it; flipping again would undo the tap.
+    if (!(window.event && window.event.target === cb)) cb.checked = !cb.checked;
     el.classList.toggle('checked', cb.checked);
+    const checks = loadJSON('hc_checks', {});
+    if (cb.checked) checks[el.dataset.key] = true; else delete checks[el.dataset.key];
+    localStorage.setItem('hc_checks', JSON.stringify(checks));
   }
 
   // WISH LIST ADD
@@ -1519,16 +1531,88 @@ Entries are due the FRIDAY before an event. Show up. Give full effort.</textarea
     const input = document.getElementById('wish-item-input');
     const text = input.value.trim();
     if (!text) return;
+    const added = loadJSON('hc_wish_added', []);
+    added.push(text);
+    localStorage.setItem('hc_wish_added', JSON.stringify(added));
+    keyChecks(addedWishItem(text));
+    input.value = '';
+  }
+  function addedWishItem(text) {
     const div = document.createElement('div');
     div.className = 'check-item';
     div.onclick = function() { toggleCheck(this); };
-    div.innerHTML = `<input type="checkbox"><span>${text}</span>`;
+    div.innerHTML = '<input type="checkbox"><span></span><button class="btn btn-sm btn-ghost" style="margin-left:auto;padding:2px 8px" title="Remove">×</button>';
+    div.querySelector('span').textContent = text;
+    div.querySelector('button').onclick = e => {
+      e.stopPropagation();
+      if (!confirm('Remove "' + text + '"?')) return;
+      const added = loadJSON('hc_wish_added', []);
+      const i = added.indexOf(text); if (i >= 0) added.splice(i, 1);
+      localStorage.setItem('hc_wish_added', JSON.stringify(added));
+      const checks = loadJSON('hc_checks', {}); delete checks[div.dataset.key];
+      localStorage.setItem('hc_checks', JSON.stringify(checks));
+      div.remove();
+    };
     document.getElementById('wish-items').appendChild(div);
-    input.value = '';
+    return div;
+  }
+
+  // SAVED NOTES + CHECKS (this browser only; hc_* keys)
+  function loadJSON(key, fallback) {
+    try { const v = JSON.parse(localStorage.getItem(key)); return v == null ? fallback : v; } catch (e) { return fallback; }
+  }
+  // A checkbox is known by its panel, its card's title and its text (plus a count when a card repeats a line).
+  function keyChecks(only) {
+    const seen = {};
+    document.querySelectorAll('.check-item').forEach(el => {
+      if (!el.querySelector('input[type="checkbox"]:not([disabled])')) return;
+      const panel = el.closest('.panel'), card = el.closest('.card'), title = card && card.querySelector('.card-title');
+      let key = (panel ? panel.id : '') + '|' + (title ? title.textContent.trim() : '') + '|' + el.querySelector('span').textContent.trim();
+      seen[key] = (seen[key] || 0) + 1;
+      if (seen[key] > 1) key += '#' + seen[key];
+      if (!only || only === el) el.dataset.key = key;
+    });
+  }
+  function loadSaved() {
+    loadJSON('hc_wish_added', []).forEach(addedWishItem);
+    keyChecks();
+    const checks = loadJSON('hc_checks', {});
+    document.querySelectorAll('.check-item[data-key]').forEach(el => {
+      const on = !!checks[el.dataset.key];
+      el.querySelector('input').checked = on;
+      el.classList.toggle('checked', on);
+    });
+    // Meet-day lists get reused every meet, so each checklist card gets a reset.
+    document.querySelectorAll('#panel-checklists .card').forEach(card => {
+      const items = card.querySelectorAll('.check-item[data-key]'), title = card.querySelector('.card-title');
+      if (!items.length || !title) return;
+      const b = document.createElement('button');
+      b.className = 'btn btn-sm btn-ghost'; b.style.marginLeft = 'auto'; b.textContent = '↺ Uncheck all';
+      b.onclick = () => {
+        const checks = loadJSON('hc_checks', {});
+        items.forEach(el => { el.querySelector('input').checked = false; el.classList.remove('checked'); delete checks[el.dataset.key]; });
+        localStorage.setItem('hc_checks', JSON.stringify(checks));
+      };
+      title.appendChild(b);
+    });
+    // Note boxes: known by panel + position in it. Saved text replaces the starter text; untouched boxes keep it.
+    const notes = loadJSON('hc_notes', {});
+    let timer = null;
+    const save = () => { clearTimeout(timer); timer = null; localStorage.setItem('hc_notes', JSON.stringify(notes)); };
+    document.querySelectorAll('.panel').forEach(panel => {
+      panel.querySelectorAll('textarea.note-area').forEach((ta, i) => {
+        const key = panel.id + '#' + i;
+        if (key in notes) ta.value = notes[key];
+        ta.addEventListener('input', () => { notes[key] = ta.value; clearTimeout(timer); timer = setTimeout(save, 400); });
+      });
+    });
+    window.addEventListener('pagehide', () => { if (timer) save(); });
+    document.addEventListener('visibilitychange', () => { if (document.hidden && timer) save(); });
   }
 
   // INIT
   renderTodos();
+  loadSaved();
 </script>
 </body>
 </html>
