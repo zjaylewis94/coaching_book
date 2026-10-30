@@ -1714,9 +1714,17 @@ Entries are due the FRIDAY before an event. Show up. Give full effort.</textarea
         const remote = file ? (JSON.parse(unb64(file.content)).items || {}) : {};
         const s = loadJSON('hc_sync_last', null);
         if (s.first) {
-          // Same text = same task: the starter to-dos get fresh ids on every device, so keep GitHub's copies.
-          const texts = new Set(Object.values(remote).filter(r => r.v && r.v.text).map(r => r.v.text));
-          for (const k in s.v) if (k.startsWith('todo:') && !(k in remote) && s.v[k] !== 'null' && texts.has(JSON.parse(s.v[k]).text)) { delete s.v[k]; delete s.t[k]; }
+          // Same text = same task: the starter to-dos get fresh ids on every device, so keep one copy. GitHub's
+          // wins if it was changed after sync began there. If both copies predate sync, a checked-off copy wins
+          // (the starters all begin unchecked, so that's the device you used); otherwise GitHub's.
+          const byText = {};
+          for (const k in remote) if (k.startsWith('todo:') && remote[k].v && remote[k].v.text) byText[remote[k].v.text] = k;
+          for (const k in s.v) {
+            if (!k.startsWith('todo:') || k in remote || s.v[k] === 'null') continue;
+            const mine = JSON.parse(s.v[k]), rk = byText[mine.text]; if (!rk) continue;
+            if (remote[rk].t === 1 && mine.done && !remote[rk].v.done) { s.v[rk] = 'null'; s.t[rk] = 2; }
+            else { delete s.v[k]; delete s.t[k]; }
+          }
         }
         for (const k in remote) {
           const r = remote[k], lt = s.t[k];
